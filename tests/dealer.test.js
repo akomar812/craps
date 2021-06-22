@@ -9,10 +9,12 @@ const newGameStub = (roll, pointValue=null, wagers={}) => {
     dice: { value: roll[0]+roll[1], current: roll },
     point: pointValue,
     payout: 0,
-    wagers: Object.assign({
-      ...new Wagers(),
-      ...wagers
-    })
+    wagers: {
+      player: Object.assign({
+        ...new Wagers(),
+        ...wagers
+      })
+    }
   };
 };
 
@@ -20,9 +22,9 @@ const basicPassWager = () => {
   return { pass: 10 };
 };
 
-const basicComeWager = () => {
-  return { come: { pass: 10, point: null } };
-};
+// const basicComeWager = () => {
+//   return { come: { pass: 10, point: null } };
+// };
 
 const basicPlaceWager = (n) => {
   const bets = [4, 5, 6, 8, 9, 10];
@@ -51,14 +53,14 @@ const basicNamedWager = (name) => {
   return { [name]: 10 };
 };
 
-const propBetTest = (wagerConfig, payoutFn) => {
+const propBetTest = (bet, wagerConfig, payoutFn) => {
   return () => {
     for (let i=1; i<=6; i++) {
       for (let j=1; j<=6; j++) {
         const game = newGameStub([i, j], utils.getRandomPoint(), wagerConfig);
         Dealer.manage(game);
         expect(game.payout).toBe(payoutFn(i+j));
-        expect(game.wagers.anyCraps).toBe(0);
+        expect(game.wagers.player[bet]).toBe(0);
       }
     }
   };
@@ -66,16 +68,16 @@ const propBetTest = (wagerConfig, payoutFn) => {
 
 test('win payout', () => {
   const game = newGameStub([0, 0], null, basicPassWager());
-  Dealer.payoutWin(game, game.wagers, pass, 'pass');
+  Dealer.payoutWin(game, game.wagers.player, pass, 'pass');
   expect(game.payout).toBe(20);
-  expect(game.wagers.pass).toBe(0);
+  expect(game.wagers.player.pass).toBe(0);
 });
 
 test('loss payout', () => {
   const game = newGameStub([0, 0], null, basicPassWager());
-  Dealer.payoutLoss(game, game.wagers, 'pass');
+  Dealer.payoutLoss(game, game.wagers.player, 'pass');
   expect(game.payout).toBe(-10);
-  expect(game.wagers.pass).toBe(0);
+  expect(game.wagers.player.pass).toBe(0);
 });
 
 test('pass bet win when point is off', () => {
@@ -83,7 +85,7 @@ test('pass bet win when point is off', () => {
   Dealer.manage(game);
   expect(game.payout).toBe(20);
   expect(game.point).toBe(null);
-  expect(game.wagers.pass).toBe(0);
+  expect(game.wagers.player.pass).toBe(0);
 });
 
 test('pass bet lose when point is off', () => {
@@ -91,7 +93,7 @@ test('pass bet lose when point is off', () => {
   Dealer.manage(game);
   expect(game.payout).toBe(-10);
   expect(game.point).toBe(null);
-  expect(game.wagers.pass).toBe(0);
+  expect(game.wagers.player.pass).toBe(0);
 });
 
 test('pass bet open when point is off', () => {
@@ -99,7 +101,7 @@ test('pass bet open when point is off', () => {
   Dealer.manage(game);
   expect(game.payout).toBe(0);
   expect(game.point).toBe(5);
-  expect(game.wagers.pass).toBe(10);
+  expect(game.wagers.player.pass).toBe(10);
 });
 
 test('pass bet win when point is on', () => {
@@ -107,7 +109,7 @@ test('pass bet win when point is on', () => {
   Dealer.manage(game);
   expect(game.payout).toBe(20);
   expect(game.point).toBe(null);
-  expect(game.wagers.pass).toBe(0);
+  expect(game.wagers.player.pass).toBe(0);
 });
 
 test('pass bet lose when point is on', () => {
@@ -115,7 +117,7 @@ test('pass bet lose when point is on', () => {
   Dealer.manage(game);
   expect(game.payout).toBe(-10);
   expect(game.point).toBe(null);
-  expect(game.wagers.pass).toBe(0);
+  expect(game.wagers.player.pass).toBe(0);
 });
 
 test('pass bet no op when point is off', () => {
@@ -123,26 +125,26 @@ test('pass bet no op when point is off', () => {
   Dealer.manage(game);
   expect(game.payout).toBe(0);
   expect(game.point).toBe(4);
-  expect(game.wagers.pass).toBe(10);
+  expect(game.wagers.player.pass).toBe(10);
 });
 
-test('come bet win', () => {
-  const game = newGameStub([5, 2], 5, basicComeWager());
-  Dealer.manage(game);
-  expect(game.payout).toBe(20);
-  expect(game.point).toBe(null);
-  expect(game.wagers.come.pass).toBe(0);
-  expect(game.wagers.come.point).toBe(null);
-});
+// test('come bet win', () => {
+//   const game = newGameStub([5, 2], 5, basicComeWager());
+//   Dealer.manage(game);
+//   expect(game.payout).toBe(20);
+//   expect(game.point).toBe(null);
+//   expect(game.wagers.player.come.pass).toBe(0);
+//   expect(game.wagers.player.come.point).toBe(null);
+// });
 
-test('come bet lose', () => {
-  const game = newGameStub([2, 1], 8, basicComeWager());
-  Dealer.manage(game);
-  expect(game.payout).toBe(-10);
-  expect(game.point).toBe(8);
-  expect(game.wagers.come.pass).toBe(0);
-  expect(game.wagers.come.point).toBe(null);
-});
+// test('come bet lose', () => {
+//   const game = newGameStub([2, 1], 8, basicComeWager());
+//   Dealer.manage(game);
+//   expect(game.payout).toBe(-10);
+//   expect(game.point).toBe(8);
+//   expect(game.wagers.come.pass).toBe(0);
+//   expect(game.wagers.come.point).toBe(null);
+// });
 
 // test('come bet open', () => {
 //   const game = newGameStub(5, 9, basicComeWager());
@@ -178,7 +180,7 @@ test('place 4 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.place['4']).toBe(expectedWager);
+      expect(game.wagers.player.place['4']).toBe(expectedWager);
     }
   }
 });
@@ -201,7 +203,7 @@ test('place 5 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.place['5']).toBe(expectedWager);
+      expect(game.wagers.player.place['5']).toBe(expectedWager);
     }
   }
 });
@@ -224,7 +226,7 @@ test('place 6 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.place['6']).toBe(expectedWager);
+      expect(game.wagers.player.place['6']).toBe(expectedWager);
     }
   }
 });
@@ -247,7 +249,7 @@ test('place 8 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.place['8']).toBe(expectedWager);
+      expect(game.wagers.player.place['8']).toBe(expectedWager);
     }
   }
 });
@@ -270,7 +272,7 @@ test('place 9 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.place['9']).toBe(expectedWager);
+      expect(game.wagers.player.place['9']).toBe(expectedWager);
     }
   }
 });
@@ -293,7 +295,7 @@ test('place 10 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.place['10']).toBe(expectedWager);
+      expect(game.wagers.player.place['10']).toBe(expectedWager);
     }
   }
 });
@@ -316,7 +318,7 @@ test('big 6 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.big['6']).toBe(expectedWager);
+      expect(game.wagers.player.big['6']).toBe(expectedWager);
     }
   }
 });
@@ -339,7 +341,7 @@ test('big 8 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.big['8']).toBe(expectedWager);
+      expect(game.wagers.player.big['8']).toBe(expectedWager);
     }
   }
 });
@@ -362,7 +364,7 @@ test('hard 4 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.hard['4']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard['4']).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
@@ -385,7 +387,7 @@ test('hard 6 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.hard['6']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard['6']).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
@@ -408,7 +410,7 @@ test('hard 8 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.hard['8']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard['8']).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
@@ -431,31 +433,31 @@ test('hard 10 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.hard['10']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard['10']).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
 
-test('2 bet', propBetTest(basicNamedWager('two'), (roll) => {
+test('2 bet', propBetTest('two', basicNamedWager('two'), (roll) => {
   return roll === 2 ? 310 : -10;
 }));
 
-test('3 bet', propBetTest(basicNamedWager('three'), (roll) => {
+test('3 bet', propBetTest('three', basicNamedWager('three'), (roll) => {
   return roll === 3 ? 160 : -10;
 }));
 
-test('11 bet', propBetTest(basicNamedWager('eleven'), (roll) => {
+test('11 bet', propBetTest('eleven', basicNamedWager('eleven'), (roll) => {
   return roll === 11 ? 160 : -10;
 }));
 
-test('12 bet', propBetTest(basicNamedWager('twelve'), (roll) => {
+test('12 bet', propBetTest('twelve', basicNamedWager('twelve'), (roll) => {
   return roll === 12 ? 310 : -10;
 }));
 
-test('any 7 bet', propBetTest(basicNamedWager('any7'), (roll) => {
+test('any 7 bet', propBetTest('any7', basicNamedWager('any7'), (roll) => {
   return roll === 7 ? 50 : -10;
 }));
 
-test('any craps bet', propBetTest(basicNamedWager('anyCraps'), (roll) => {
+test('any craps bet', propBetTest('anyCraps', basicNamedWager('anyCraps'), (roll) => {
   return [2, 3, 12].indexOf(roll) >= 0 ? 80 : -10;
 }));
