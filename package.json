@@ -1,0 +1,22 @@
+{
+  "name": "craps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "jest": "^27.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage --verbose",
+    "lint": "npx eslint ."
+  },
+  "author": "andrew komar",
+  "license": "ISC"
+}
