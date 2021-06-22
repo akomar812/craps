@@ -1,8 +1,7 @@
 'use strict';
 
 class Wagers {
-  constructor(opts={}) {
-    this.debug = opts.debug || false;
+  constructor() {
     this.pass = 0;
     this.two = 0;
     this.three = 0;
@@ -36,6 +35,24 @@ class Wagers {
       '8': 0,
       '10': 0
     };
+  }
+
+  isActive() {
+    for (let key in this) {
+      if (Number.isInteger(this[key])) {
+        if (this[key] > 0) {
+          return true;
+        }
+      } else {
+        for (let subkey in this[key]) {
+          if (this[key][subkey] > 0) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 }
 

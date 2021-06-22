@@ -6,6 +6,9 @@
   "directories": {
     "test": "tests"
   },
+  "bin": {
+    "craps": "./bin/craps"
+  },
   "dependencies": {
     "jest": "^27.0.4"
   },
