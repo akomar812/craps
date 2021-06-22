@@ -2,7 +2,7 @@
 const Big = require('../bets/big.js');
 const utils = require('./utils.js');
 
-test('that big bet constructor works as expected', () => {
+test('big bet constructor works as expected', () => {
   expect(() => new Big()).toThrow(new Error('Big bets are only defined for 6, and 8'));
 
   for (let i=2; i<=12; i++) {
@@ -15,7 +15,7 @@ test('that big bet constructor works as expected', () => {
   }
 });
 
-test('that big 6 bet evaluation behaves as expects', () => {
+test('big 6 bet evaluation behaves as expects', () => {
   const big6 = new Big(6);
   expect(big6.houseEdge).toBe(9);
 
@@ -26,7 +26,7 @@ test('that big 6 bet evaluation behaves as expects', () => {
   }
 });
 
-test('that big 8 bet evaluation behaves as expects', () => {
+test('big 8 bet evaluation behaves as expects', () => {
   const big8 = new Big(8);
   expect(big8.houseEdge).toBe(9);
 

@@ -2,14 +2,14 @@
 const Pass = require('../bets/pass.js');
 const utils = require('./utils.js');
 
-test('that pass constructor works as expected', () => {
+test('pass constructor works as expected', () => {
   const pass = new Pass();
   expect(pass.type).toBe('multi');
   expect(pass.houseEdge).toBe(1.41);
   expect(pass.payout).toStrictEqual({ '*': 1 });
 });
 
-test('that pass bet evaluation behaves as expects', () => {
+test('pass bet evaluation behaves as expects', () => {
   const pass = new Pass();
   expect(pass.evaluate(2)).toBe(false);
   expect(pass.evaluate(3)).toBe(false);

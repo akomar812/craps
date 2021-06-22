@@ -2,14 +2,14 @@
 const Come = require('../bets/come.js');
 const utils = require('./utils.js');
 
-test('that pass constructor works as expected', () => {
+test('pass constructor works as expected', () => {
   const come = new Come();
   expect(come.type).toBe('multi');
   expect(come.houseEdge).toBe(1.41);
   expect(come.payout).toStrictEqual({ '*': 1 });
 });
 
-test('that come bet evaluation behaves as expects', () => {
+test('come bet evaluation behaves as expects', () => {
   const come = new Come();
 
   for (var i=0; i<100; i++) {

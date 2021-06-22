@@ -2,7 +2,7 @@
 const Bet = require('../bets').Bet;
 
 
-test('that bet constructor works as expected', () => {
+test('bet constructor works as expected', () => {
   expect(() => new Bet())
     .toThrow(new Error('Invalid bet type: undefined'));
 

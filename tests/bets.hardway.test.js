@@ -2,7 +2,7 @@
 const HardWay = require('../bets/hardway.js');
 const utils = require('./utils.js');
 
-test('that hard way bet constructor works as expected', () => {
+test('hard way bet constructor works as expected', () => {
   expect(() => new HardWay()).toThrow(new Error('Hard way bets are only defined for 4, 6, 8, and 10'));
 
   for (let i=2; i<=12; i++) {
@@ -15,7 +15,7 @@ test('that hard way bet constructor works as expected', () => {
   }
 });
 
-test('that hard 4 bet evaluation behaves as expects', () => {
+test('hard 4 bet evaluation behaves as expects', () => {
   const hard4 = new HardWay(4);
   expect(hard4.houseEdge).toBe(11.11);
 
@@ -26,7 +26,7 @@ test('that hard 4 bet evaluation behaves as expects', () => {
   }
 });
 
-test('that hard 6 bet evaluation behaves as expects', () => {
+test('hard 6 bet evaluation behaves as expects', () => {
   const hard6 = new HardWay(6);
   expect(hard6.houseEdge).toBe(9.09);
 
@@ -37,7 +37,7 @@ test('that hard 6 bet evaluation behaves as expects', () => {
   }
 });
 
-test('that hard 8 bet evaluation behaves as expects', () => {
+test('hard 8 bet evaluation behaves as expects', () => {
   const hard8 = new HardWay(8);
   expect(hard8.houseEdge).toBe(9.09);
 
@@ -48,7 +48,7 @@ test('that hard 8 bet evaluation behaves as expects', () => {
   }
 });
 
-test('that hard 10 bet evaluation behaves as expects', () => {
+test('hard 10 bet evaluation behaves as expects', () => {
   const hard10 = new HardWay(10);
   expect(hard10.houseEdge).toBe(11.11);
 

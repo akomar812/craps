@@ -1,7 +1,7 @@
 'use strict';
 const Single = require('../bets/single.js');
 
-test('that single bet constructor works as expected', () => {
+test('single bet constructor works as expected', () => {
   expect(() => new Single()).toThrow(new Error('Single bets are only defined for 2, 3, 11, and 12'));
 
   for (let i=2; i<=12; i++) {
@@ -14,7 +14,7 @@ test('that single bet constructor works as expected', () => {
   }
 });
 
-test('that two bet evaluation behaves as expects', () => {
+test('two bet evaluation behaves as expects', () => {
   const two = new Single(2);
   expect(two.houseEdge).toBe(13.89);
 
@@ -23,7 +23,7 @@ test('that two bet evaluation behaves as expects', () => {
   }
 });
 
-test('that three bet evaluation behaves as expects', () => {
+test('three bet evaluation behaves as expects', () => {
   const three = new Single(3);
   expect(three.houseEdge).toBe(11.11);
 
@@ -32,7 +32,7 @@ test('that three bet evaluation behaves as expects', () => {
   }
 });
 
-test('that eleven bet evaluation behaves as expects', () => {
+test('eleven bet evaluation behaves as expects', () => {
   const eleven = new Single(11);
   expect(eleven.houseEdge).toBe(11.11);
 
@@ -41,7 +41,7 @@ test('that eleven bet evaluation behaves as expects', () => {
   }
 });
 
-test('that twelve bet evaluation behaves as expects', () => {
+test('twelve bet evaluation behaves as expects', () => {
   const twelve = new Single(12);
   expect(twelve.houseEdge).toBe(13.89);
 

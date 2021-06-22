@@ -2,7 +2,7 @@
 const Dice = require('../dice.js');
 
 
-test('that dice constructor works as expected', () => {
+test('dice constructor works as expected', () => {
   const dice = new Dice();
   expect(dice.debug).toBe(false);
   expect(dice.current.length).toBe(0);
@@ -15,7 +15,7 @@ test('that dice constructor works as expected', () => {
 });
 
 
-test('that each dice roll has roughly a 1/6 probability of occurring', () => {
+test('each dice roll has roughly a 1/6 probability of occurring', () => {
   /*
     strategy: roll the dice a ton of times and rely on the law of large numbers
     to eventually cause the occurrence of each possible dice roll to converge towards 1/6

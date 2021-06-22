@@ -3,7 +3,7 @@ const Craps = require('../craps.js');
 const Dice = require('../dice.js');
 const Wagers = require('../wagers.js');
 
-test('that craps constructor works as expected', () => {
+test('craps constructor works as expected', () => {
   const craps = new Craps();
   expect(craps.debug).toBe(false);
   expect(craps.dice instanceof Dice).toBe(true);
@@ -12,7 +12,7 @@ test('that craps constructor works as expected', () => {
   expect(craps.point).toBe(null);
 });
 
-test('that players can be added and not duplicated', () => {
+test('players can be added and not duplicated', () => {
   const craps = new Craps();
 
   craps.addPlayer('player');
