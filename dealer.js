@@ -48,8 +48,8 @@ class Dealer {
       three: bets.three.evaluate(game.dice.value),
       eleven: bets.eleven.evaluate(game.dice.value),
       twelve: bets.twelve.evaluate(game.dice.value),
-      any7: bets.any7.evaluate(game.dice.value),
-      anyCraps: bets.anyCraps.evaluate(game.dice.value),
+      any7: bets.any7.evaluate(game),
+      anyCraps: bets.anyCraps.evaluate(game),
     }
 
     // multi-roll bets stay around until the bet conditions are met or a 7 is rolled

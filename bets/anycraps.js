@@ -12,8 +12,8 @@ class AnyCraps extends Bet {
     });
   }
 
-  evaluate(roll) {
-    if ([2, 3, 12].indexOf(roll) >= 0) {
+  evaluate(game) {
+    if ([2, 3, 12].indexOf(game.dice.value) >= 0) {
       return true;
     }
 

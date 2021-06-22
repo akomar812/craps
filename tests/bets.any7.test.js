@@ -15,6 +15,6 @@ test('that any 7 bet evaluation behaves as expects', () => {
   for (var i=0; i<10; i++) {
     const roll = utils.getRandomRoll();
     const expected = roll === 7 ? true : false;
-    expect(any7.evaluate(roll)).toBe(expected);
+    expect(any7.evaluate({ dice: { value: roll }})).toBe(expected);
   }
 });

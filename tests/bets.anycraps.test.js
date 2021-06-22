@@ -15,6 +15,6 @@ test('that any craps bet evaluation behaves as expects', () => {
   for (var i=0; i<10; i++) {
     const roll = utils.getRandomRoll();
     const expected = roll === 2 || roll === 3 || roll === 12 ? true : false;
-    expect(anyCraps.evaluate(roll)).toBe(expected);
+    expect(anyCraps.evaluate({ dice: { value: roll } })).toBe(expected);
   }
 });

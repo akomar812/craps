@@ -12,8 +12,8 @@ class Any7 extends Bet {
     });
   }
 
-  evaluate(roll) {
-    if (roll === 7) {
+  evaluate(game) {
+    if (game.dice.value === 7) {
       return true;
     }
 
