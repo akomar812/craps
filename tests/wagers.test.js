@@ -48,19 +48,3 @@ test('bets cause wager book to activate', () => {
     expect(w.isActive()).toBe(true);
   }
 });
-
-test('bets cause wager book to activate', () => {
-  const wagers = new Wagers();
-  const spy = jest.spyOn(console, 'log').mockImplementation();
-
-  wagers.hard4 = 1;
-  wagers.place9 = 2;
-  wagers.three = 10;
-  wagers.report();
-  expect(spy).toHaveBeenCalledTimes(3);
-  expect(spy).toHaveBeenNthCalledWith(1, `three: ${10}`);
-  expect(spy).toHaveBeenNthCalledWith(2, `place9: ${2}`);
-  expect(spy).toHaveBeenNthCalledWith(3, `hard4: ${1}`);
-  
-  spy.mockRestore();
-});

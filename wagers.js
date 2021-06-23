@@ -42,14 +42,6 @@ class Wagers {
 
     return false;
   }
-
-  report() {
-    for (let key in this) {
-      if (this[key] > 0) {
-        console.log(`${key}: ${this[key]}`);
-      }
-    }
-  }
 }
 
 module.exports = Wagers;
