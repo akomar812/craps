@@ -1,7 +1,6 @@
 'use strict';
 const Dealer = require('../dealer.js');
 const Wagers = require('../wagers.js');
-const pass = new (require('../bets/pass.js'))();
 const utils = require('./utils.js');
 
 const newGameStub = (roll, pointValue=null, wagers={}) => {
@@ -57,7 +56,7 @@ const propBetTest = (bet, wagerConfig, payoutFn) => {
 
 test('win payout', () => {
   const game = newGameStub([0, 0], null, basicNamedWager('pass'));
-  Dealer.payoutWin(game, game.players.player.wagers, pass, 'pass');
+  Dealer.payoutWin(game, game.players.player.wagers, 'pass');
   expect(game.players.player.pot).toBe(20);
   expect(game.players.player.wagers.pass).toBe(0);
 });
