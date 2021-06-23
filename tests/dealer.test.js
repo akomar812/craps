@@ -20,25 +20,9 @@ const newGameStub = (roll, pointValue=null, wagers={}) => {
   };
 };
 
-const basicPassWager = () => {
-  return { pass: 10 };
-};
-
 // const basicComeWager = () => {
 //   return { come: { pass: 10, point: null } };
 // };
-
-const basicPlaceWager = (bet) => {
-  return { place4: 0, place5: 0, place6: 0, place8: 0, place9: 0, place10: 0, ...{ [bet]: 10 } };
-};
-
-const basicBigWager = (bet) => {
-  return { big6: 0, big8: 0, ...{ [bet]: 10 } };
-};
-
-const basicHardWager = (bet) => {
-  return { hard4: 0, hard6: 0, hard8: 0, hard10: 0, ...{ [bet]: 10 } };
-};
 
 const basicNamedWager = (name) => {
   return { [name]: 10 };
@@ -72,21 +56,21 @@ const propBetTest = (bet, wagerConfig, payoutFn) => {
 };
 
 test('win payout', () => {
-  const game = newGameStub([0, 0], null, basicPassWager());
+  const game = newGameStub([0, 0], null, basicNamedWager('pass'));
   Dealer.payoutWin(game, game.players.player.wagers, pass, 'pass');
   expect(game.players.player.pot).toBe(20);
   expect(game.players.player.wagers.pass).toBe(0);
 });
 
 test('loss payout', () => {
-  const game = newGameStub([0, 0], null, basicPassWager());
+  const game = newGameStub([0, 0], null, basicNamedWager('pass'));
   Dealer.payoutLoss(game, game.players.player.wagers, 'pass');
   expect(game.players.player.pot).toBe(-10);
   expect(game.players.player.wagers.pass).toBe(0);
 });
 
 test('pass bet win when point is off', () => {
-  const game = newGameStub([3, 4], null, basicPassWager());
+  const game = newGameStub([3, 4], null, basicNamedWager('pass'));
   Dealer.manage(game);
   expect(game.players.player.pot).toBe(20);
   expect(game.point).toBe(null);
@@ -94,7 +78,7 @@ test('pass bet win when point is off', () => {
 });
 
 test('pass bet lose when point is off', () => {
-  const game = newGameStub([1, 1], null, basicPassWager());
+  const game = newGameStub([1, 1], null, basicNamedWager('pass'));
   Dealer.manage(game);
   expect(game.players.player.pot).toBe(-10);
   expect(game.point).toBe(null);
@@ -102,7 +86,7 @@ test('pass bet lose when point is off', () => {
 });
 
 test('pass bet open when point is off', () => {
-  const game = newGameStub([2, 3], null, basicPassWager());
+  const game = newGameStub([2, 3], null, basicNamedWager('pass'));
   Dealer.manage(game);
   expect(game.players.player.pot).toBe(0);
   expect(game.point).toBe(5);
@@ -110,7 +94,7 @@ test('pass bet open when point is off', () => {
 });
 
 test('pass bet win when point is on', () => {
-  const game = newGameStub([3, 3], 6, basicPassWager());
+  const game = newGameStub([3, 3], 6, basicNamedWager('pass'));
   Dealer.manage(game);
   expect(game.players.player.pot).toBe(20);
   expect(game.point).toBe(null);
@@ -118,7 +102,7 @@ test('pass bet win when point is on', () => {
 });
 
 test('pass bet lose when point is on', () => {
-  const game = newGameStub([6, 1], 10, basicPassWager());
+  const game = newGameStub([6, 1], 10, basicNamedWager('pass'));
   Dealer.manage(game);
   expect(game.players.player.pot).toBe(-10);
   expect(game.point).toBe(null);
@@ -126,7 +110,7 @@ test('pass bet lose when point is on', () => {
 });
 
 test('pass bet no op when point is on', () => {
-  const game = newGameStub([6, 4], utils.getRandomPoint(10), basicPassWager());
+  const game = newGameStub([6, 4], utils.getRandomPoint(10), basicNamedWager('pass'));
   Dealer.manage(game);
   expect(game.players.player.pot).toBe(0);
   expect(game.point).toBe(game.point);
@@ -224,55 +208,55 @@ test('don\'t pass bet no op when point is on', () => {
 //   expect(game.point).toBe(5);
 // });
 
-test('place 4 bet', multiBetTest('place4', basicPlaceWager('place4'), (dice) => {
+test('place 4 bet', multiBetTest('place4', basicNamedWager('place4'), (dice) => {
   if (dice[0] + dice[1] === 4) return [10 + (10 * (9/5)), 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('place 5 bet', multiBetTest('place5', basicPlaceWager('place5'), (dice) => {
+test('place 5 bet', multiBetTest('place5', basicNamedWager('place5'), (dice) => {
   if (dice[0] + dice[1] === 5) return [10 + (10 * (7/5)), 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('place 6 bet', multiBetTest('place6', basicPlaceWager('place6'), (dice) => {
+test('place 6 bet', multiBetTest('place6', basicNamedWager('place6'), (dice) => {
   if (dice[0] + dice[1] === 6) return [10 + (10 * (7/6)), 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('place 8 bet', multiBetTest('place8', basicPlaceWager('place8'), (dice) => {
+test('place 8 bet', multiBetTest('place8', basicNamedWager('place8'), (dice) => {
   if (dice[0] + dice[1] === 8) return [10 + (10 * (7/6)), 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('place 9 bet', multiBetTest('place9', basicPlaceWager('place9'), (dice) => {
+test('place 9 bet', multiBetTest('place9', basicNamedWager('place9'), (dice) => {
   if (dice[0] + dice[1] === 9) return [10 + (10 * (7/5)), 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('place 10 bet', multiBetTest('place10', basicPlaceWager('place10'), (dice) => {
+test('place 10 bet', multiBetTest('place10', basicNamedWager('place10'), (dice) => {
   if (dice[0] + dice[1] === 10) return [10 + (10 * (9/5)), 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('big 6 bet', multiBetTest('big6', basicBigWager('big6'), (dice) => {
+test('big 6 bet', multiBetTest('big6', basicNamedWager('big6'), (dice) => {
   if (dice[0] + dice[1] === 6) return [20, 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('big 8 bet', multiBetTest('big8', basicBigWager('big8'), (dice) => {
+test('big 8 bet', multiBetTest('big8', basicNamedWager('big8'), (dice) => {
   if (dice[0] + dice[1] === 8) return [20, 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
   else return [0, 10];
 }));
 
-test('hard 4 bet', multiBetTest('hard4', basicHardWager('hard4'), (dice) => {
+test('hard 4 bet', multiBetTest('hard4', basicNamedWager('hard4'), (dice) => {
   const ex = utils.getHardWayExpectedValue(dice[0], dice[1], 4);
 
   if (ex === true) return [80, 0];
@@ -281,7 +265,7 @@ test('hard 4 bet', multiBetTest('hard4', basicHardWager('hard4'), (dice) => {
 }));
 
 
-test('hard 6 bet', multiBetTest('hard6', basicHardWager('hard6'), (dice) => {
+test('hard 6 bet', multiBetTest('hard6', basicNamedWager('hard6'), (dice) => {
   const ex = utils.getHardWayExpectedValue(dice[0], dice[1], 6);
 
   if (ex === true) return [100, 0];
@@ -289,7 +273,7 @@ test('hard 6 bet', multiBetTest('hard6', basicHardWager('hard6'), (dice) => {
   else return [0, 10];
 }));
 
-test('hard 8 bet', multiBetTest('hard8', basicHardWager('hard8'), (dice) => {
+test('hard 8 bet', multiBetTest('hard8', basicNamedWager('hard8'), (dice) => {
   const ex = utils.getHardWayExpectedValue(dice[0], dice[1], 8);
 
   if (ex === true) return [100, 0];
@@ -297,7 +281,7 @@ test('hard 8 bet', multiBetTest('hard8', basicHardWager('hard8'), (dice) => {
   else return [0, 10];
 }));
 
-test('hard 10 bet', multiBetTest('hard10', basicHardWager('hard10'), (dice) => {
+test('hard 10 bet', multiBetTest('hard10', basicNamedWager('hard10'), (dice) => {
   const ex = utils.getHardWayExpectedValue(dice[0], dice[1], 10);
 
   if (ex === true) return [80, 0];
