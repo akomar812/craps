@@ -17,5 +17,5 @@ test('players can be added and not duplicated', () => {
 
   craps.addPlayer('player');
   expect(craps.wagers.player instanceof Wagers).toBe(true);
-  expect(() => craps.addPlayer('player')).toThrow(new Error(`A player named player already exists`));
+  expect(() => craps.addPlayer('player')).toThrow(new Error('A player named player already exists'));
 });

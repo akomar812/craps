@@ -10,18 +10,18 @@ const rl = readline.createInterface({
 const textInterface = (game, player, msg) => {
   rl.question(msg, (answer) => {
     switch(answer) {
-      case 'exit':
-        return rl.close();
-      case 'roll':
-        if (game.wagers.player.isActive()) {
-          game.dice.roll();
-          console.log(`${player} rolled: ${game.dice.value} (${game.dice.current})`);
-        } else {
-          console.log('A bet must be placed before the dice can be rolled')
-        }
-        break;
-      default:
-        console.log(`Received message: ${answer}`);
+    case 'exit':
+      return rl.close();
+    case 'roll':
+      if (game.wagers.player.isActive()) {
+        game.dice.roll();
+        console.log(`${player} rolled: ${game.dice.value} (${game.dice.current})`);
+      } else {
+        console.log('A bet must be placed before the dice can be rolled');
+      }
+      break;
+    default:
+      console.log(`Received message: ${answer}`);
     }
 
     textInterface(game, player, '> ');

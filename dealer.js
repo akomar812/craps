@@ -50,7 +50,7 @@ class Dealer {
       twelve: bets.twelve.evaluate(game.dice.value),
       any7: bets.any7.evaluate(game),
       anyCraps: bets.anyCraps.evaluate(game),
-    }
+    };
 
     // multi-roll bets stay around until the bet conditions are met or a 7 is rolled
     if (results.pass !== undefined) {
@@ -82,8 +82,8 @@ class Dealer {
           }
         } else {
           results[bet] === true ?
-          this.payoutWin(game, game.wagers.player, bets[bet], bet) :
-          this.payoutLoss(game, game.wagers.player, bet);
+            this.payoutWin(game, game.wagers.player, bets[bet], bet) :
+            this.payoutLoss(game, game.wagers.player, bet);
         }
       }
     }
