@@ -182,7 +182,7 @@ test('don\'t pass bet win when point is on', () => {
 });
 
 test('don\'t pass bet no op when point is on', () => {
-  const game = newGameStub([6, 4], utils.getRandomPoint(), basicNamedWager('dontpass'));
+  const game = newGameStub([6, 4], utils.getRandomPoint(10), basicNamedWager('dontpass'));
   Dealer.manage(game);
   expect(game.players.player.pot).toBe(0);
   expect(game.point).toBe(game.point);

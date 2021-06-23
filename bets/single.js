@@ -21,8 +21,8 @@ class Single extends Bet {
     this.selection = number;
   }
 
-  evaluate(roll) {
-    if (this.selection === roll) {
+  evaluate(game) {
+    if (this.selection === game.dice.value) {
       return true;
     }
 

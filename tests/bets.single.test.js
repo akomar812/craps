@@ -19,7 +19,7 @@ test('two bet evaluation behaves as expects', () => {
   expect(two.houseEdge).toBe(13.89);
 
   for (let i=2; i<=12; i++) {
-    expect(two.evaluate(i)).toBe(i === 2);
+    expect(two.evaluate({ dice: { value: i } })).toBe(i === 2);
   }
 });
 
@@ -28,7 +28,7 @@ test('three bet evaluation behaves as expects', () => {
   expect(three.houseEdge).toBe(11.11);
 
   for (let i=2; i<=12; i++) {
-    expect(three.evaluate(i)).toBe(i === 3);
+    expect(three.evaluate({ dice: { value: i } })).toBe(i === 3);
   }
 });
 
@@ -37,7 +37,7 @@ test('eleven bet evaluation behaves as expects', () => {
   expect(eleven.houseEdge).toBe(11.11);
 
   for (let i=2; i<=12; i++) {
-    expect(eleven.evaluate(i)).toBe(i === 11);
+    expect(eleven.evaluate({ dice: { value: i } })).toBe(i === 11);
   }
 });
 
@@ -46,6 +46,6 @@ test('twelve bet evaluation behaves as expects', () => {
   expect(twelve.houseEdge).toBe(13.89);
 
   for (let i=2; i<=12; i++) {
-    expect(twelve.evaluate(i)).toBe(i === 12);
+    expect(twelve.evaluate({ dice: { value: i } })).toBe(i === 12);
   }
 });
