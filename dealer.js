@@ -59,8 +59,8 @@ class Dealer {
     // multi-roll bets stay around until the bet conditions are met or a 7 is rolled
     if (results.pass !== undefined) {
       results.pass === true ? 
-        this.payoutWin(game, game.wagers.player, bets.pass, 'pass') :
-        this.payoutLoss(game, game.wagers.player, 'pass');
+        this.payoutWin(game, game.players.player.wagers, bets.pass, 'pass') :
+        this.payoutLoss(game, game.players.player.wagers, 'pass');
 
       game.point = null;
     } else if (game.point === null) {
@@ -69,22 +69,22 @@ class Dealer {
 
     // if (results.come !== undefined) {
     //   results.come === true ?
-    //     this.payoutWin(game, game.wagers.player.come, bets.come, 'pass') :
-    //     this.payoutLoss(game, game.wagers.player.come, 'pass');
+    //     this.payoutWin(game, game.players.player.wagers.come, bets.come, 'pass') :
+    //     this.payoutLoss(game, game.players.player.wagers.come, 'pass');
     // }
 
     for (let bet in bets) {
       if (['pass', 'come'].indexOf(bet) < 0) {
         if (bets[bet].type === 'multi') {
           if (results[bet] === true) {
-            this.payoutWin(game, game.wagers.player, bets[bet], bet);
+            this.payoutWin(game, game.players.player.wagers, bets[bet], bet);
           } else if (results[bet] === false) {
-            this.payoutLoss(game, game.wagers.player, bet);
+            this.payoutLoss(game, game.players.player.wagers, bet);
           }
         } else {
           results[bet] === true ?
-            this.payoutWin(game, game.wagers.player, bets[bet], bet) :
-            this.payoutLoss(game, game.wagers.player, bet);
+            this.payoutWin(game, game.players.player.wagers, bets[bet], bet) :
+            this.payoutLoss(game, game.players.player.wagers, bet);
         }
       }
     }
@@ -95,12 +95,12 @@ class Dealer {
     const payout = roll in bet.payout ? bet.payout[roll] : bet.payout['*'];
     const stake = wagerBook[wagerName];
     //console.log(wagerName, roll, payout, stake, game.payout)
-    game.payout += (stake + (payout * stake));
+    game.players.player.pot += (stake + (payout * stake));
     wagerBook[wagerName] = 0;
   }
 
   static payoutLoss(game, wagerBook, wagerName) {
-    game.payout -= wagerBook[wagerName];
+    game.players.player.pot -= wagerBook[wagerName];
     wagerBook[wagerName] = 0;
   }
 

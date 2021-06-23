@@ -9,25 +9,23 @@ class Craps {
     this.mode = opts.mode || 'single';
     this.Dealer = Dealer;
     this.dice = new Dice({ debug: this.debug });
-    this.payout = 0;
+    this.players = {};
     this.point = null;
-    this.wagers = {};
   }
 
-  addPlayer(name) {
-    if (name in this.wagers) {
+  addPlayer(name, pot=100) {
+    if (name in this.players) {
       throw new Error(`A player named ${name} already exists`);
     }
 
-    this.wagers[name] = new Wagers();
+    this.players[name] = { pot: pot, wagers: new Wagers() };
   }
 
   newGame() {
-    this.payout = 0;
     this.point = null;
 
-    for (let player in this.wagers) {
-      this.wagers[player] = new Wagers();
+    for (let player in this.players) {
+      this.players[player].wagers = new Wagers();
     }
   }
 }

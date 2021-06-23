@@ -13,13 +13,13 @@ const handleBet = (game, bet, amount) => {
     return console.log(`Cannot place bet: ${amount}, amount must be positive number`);
   }
 
-  game.Dealer.requestBet(game, game.wagers.player, bet, amount) ?
+  game.Dealer.requestBet(game, game.players.player.wagers, bet, amount) ?
     console.log(`Successfully placed bet: ${bet} for amount: ${amount}`) :
     console.log(`Failed to place bet: ${bet} for amount: ${amount}`);
 };
 
 const handleRoll = (game) => {
-  if (game.wagers.player.isActive()) {
+  if (game.players.player.wagers.isActive()) {
     game.dice.roll();
     game.Dealer.manage(game);
   } else {
@@ -37,10 +37,10 @@ const textInterface = (game, player, msg) => {
       console.log(`Point currently set to: ${game.point}`);
       break;
     case 'pot':
-      console.log(`Current pot value: ${game.payout}`);
+      console.log(`Current pot value: ${game.players.player.pot}`);
       break;
     case 'wagers':
-      game.wagers.player.report();
+      game.players.player.wagers.report();
       break;
     case 'roll':
       handleRoll(game);
@@ -59,22 +59,7 @@ const textInterface = (game, player, msg) => {
 module.exports = (args) => {
   const craps = new Craps({ debug: true });
   const player = args.playerName || 'player';
-  craps.addPlayer(player);
+  const pot = args.pot || 1000;
+  craps.addPlayer(player, pot);
   textInterface(craps, player, `${player} connected to craps table...\n${PS1}`);
 };
-// const Craps = require('./craps.js');
-// //const Strategy = require('./strategies/6_8_progression.js');
-// const Strategy = require('./strategies/basic_pass_line.js');
-// const target = 200;
-// let total = 0;
-// let count = 0;
-
-// while (total < target) {
-//   const game = new Craps({debug:true});
-//   console.log('Starting game with total:', total);
-//   game.play(new Strategy());
-//   total += game.payout;
-//   count++;
-// }
-
-// console.log('Took', count, 'games to reach $', target);
