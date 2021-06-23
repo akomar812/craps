@@ -31,32 +31,14 @@ const bets = {
 
 class Dealer {
   static manage(game) {
-    const results = {
-      pass: bets.pass.evaluate(game.dice.value, game.point),
-      dontpass: bets.dontpass.evaluate(game),
-      // come: bets.come.evaluate(game.dice.value, game.point, game.wagers.come),
-      field: bets.field.evaluate(game),
-      place4: bets.place4.evaluate(game.dice.current),
-      place5: bets.place5.evaluate(game.dice.current),
-      place6: bets.place6.evaluate(game.dice.current),
-      place8: bets.place8.evaluate(game.dice.current),
-      place9: bets.place9.evaluate(game.dice.current),
-      place10: bets.place10.evaluate(game.dice.current),
-      big6: bets.big6.evaluate(game.dice.current),
-      big8: bets.big8.evaluate(game.dice.current),
-      hard4: bets.hard4.evaluate(game.dice.current),
-      hard6: bets.hard6.evaluate(game.dice.current),
-      hard8: bets.hard8.evaluate(game.dice.current),
-      hard10: bets.hard10.evaluate(game.dice.current),
-      two: bets.two.evaluate(game),
-      three: bets.three.evaluate(game),
-      eleven: bets.eleven.evaluate(game),
-      twelve: bets.twelve.evaluate(game),
-      any7: bets.any7.evaluate(game),
-      anyCraps: bets.anyCraps.evaluate(game),
-    };
+    // compute the results of all bets
+    const results = {};
 
-    // multi-roll bets stay around until the bet conditions are met or a 7 is rolled
+    for (let bet in bets) {
+      results[bet] = bets[bet].evaluate(game);
+    }
+
+    // pass bet handled separately (for now)
     if (results.pass !== undefined) {
       results.pass === true ? 
         this.payoutWin(game, game.players.player.wagers, bets.pass, 'pass') :

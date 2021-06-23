@@ -12,22 +12,22 @@ class Pass extends Bet {
     });
   }
 
-  evaluate(roll, point) {
-    if (!point) {
-      if ([7, 11].indexOf(roll) >= 0) {
+  evaluate(game) {
+    if (!game.point) {
+      if ([7, 11].indexOf(game.dice.value) >= 0) {
         return true;
       } 
 
-      if ([2, 3, 12].indexOf(roll) >= 0) {
+      if ([2, 3, 12].indexOf(game.dice.value) >= 0) {
         return false;
       }
     }
 
-    if (point === roll) {
+    if (game.point === game.dice.value) {
       return true;
     }
 
-    if (roll === 7) {
+    if (7 === game.dice.value) {
       return false;
     }
   }

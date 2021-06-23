@@ -21,7 +21,7 @@ test('hard 4 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(hard4.evaluate([i, j])).toBe(utils.getHardWayExpectedValue(i, j, 4)); 
+      expect(hard4.evaluate({ dice: { value: i+j, current: [i, j]} })).toBe(utils.getHardWayExpectedValue(i, j, 4)); 
     }
   }
 });
@@ -32,7 +32,7 @@ test('hard 6 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(hard6.evaluate([i, j])).toBe(utils.getHardWayExpectedValue(i, j, 6)); 
+      expect(hard6.evaluate({ dice: { value: i+j, current: [i, j]} })).toBe(utils.getHardWayExpectedValue(i, j, 6)); 
     }
   }
 });
@@ -43,7 +43,7 @@ test('hard 8 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(hard8.evaluate([i, j])).toBe(utils.getHardWayExpectedValue(i, j, 8)); 
+      expect(hard8.evaluate({ dice: { value: i+j, current: [i, j]} })).toBe(utils.getHardWayExpectedValue(i, j, 8)); 
     }
   }
 });
@@ -54,7 +54,7 @@ test('hard 10 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(hard10.evaluate([i, j])).toBe(utils.getHardWayExpectedValue(i, j, 10)); 
+      expect(hard10.evaluate({ dice: { value: i+j, current: [i, j]} })).toBe(utils.getHardWayExpectedValue(i, j, 10)); 
     }
   }
 });

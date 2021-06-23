@@ -28,10 +28,10 @@ class Place extends Bet {
     this.selection = number;
   }
 
-  evaluate(dice) {
-    if (this.selection === dice[0] + dice[1]) {
+  evaluate(game) {
+    if (this.selection === game.dice.value) {
       return true;
-    } else if (dice[0] + dice[1] === 7) {
+    } else if (7 === game.dice.value) {
       return false;
     }
   }

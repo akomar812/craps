@@ -22,7 +22,7 @@ test('place 4 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(place4.evaluate([i, j])).toBe(utils.getTargetExpectedValue(i, j, 4));
+      expect(place4.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i, j, 4));
     }
   }
 });
@@ -33,7 +33,7 @@ test('place 5 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(place5.evaluate([i, j])).toBe(utils.getTargetExpectedValue(i, j, 5));
+      expect(place5.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i, j, 5));
     }
   }
 });
@@ -44,7 +44,7 @@ test('place 6 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(place6.evaluate([i, j])).toBe(utils.getTargetExpectedValue(i, j, 6));
+      expect(place6.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i, j, 6));
     }
   }
 });
@@ -55,7 +55,7 @@ test('place 8 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(place8.evaluate([i, j])).toBe(utils.getTargetExpectedValue(i, j, 8));
+      expect(place8.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i, j, 8));
     }
   }
 });
@@ -66,7 +66,7 @@ test('place 9 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(place4.evaluate([i, j])).toBe(utils.getTargetExpectedValue(i, j, 9));
+      expect(place4.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i, j, 9));
     }
   }
 });
@@ -77,7 +77,7 @@ test('place 10 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(place10.evaluate([i, j])).toBe(utils.getTargetExpectedValue(i, j, 10));
+      expect(place10.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i, j, 10));
     }
   }
 });

@@ -21,9 +21,9 @@ class HardWay extends Bet {
     this.selection = number;
   }
 
-  evaluate(dice) {
-    if (this.selection === dice[0] + dice[1]) {
-      return dice[0] === dice[1];
+  evaluate(game) {
+    if (this.selection === game.dice.value) {
+      return game.dice.current[0] === game.dice.current[1];
     }
   }
 }

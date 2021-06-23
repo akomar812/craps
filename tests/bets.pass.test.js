@@ -11,17 +11,17 @@ test('pass constructor works as expected', () => {
 
 test('pass bet evaluation behaves as expects', () => {
   const pass = new Pass();
-  expect(pass.evaluate(2)).toBe(false);
-  expect(pass.evaluate(3)).toBe(false);
-  expect(pass.evaluate(4)).toBe(undefined);
-  expect(pass.evaluate(5)).toBe(undefined);
-  expect(pass.evaluate(6)).toBe(undefined);
-  expect(pass.evaluate(7)).toBe(true);
-  expect(pass.evaluate(8)).toBe(undefined);
-  expect(pass.evaluate(9)).toBe(undefined);
-  expect(pass.evaluate(10)).toBe(undefined);
-  expect(pass.evaluate(11)).toBe(true);
-  expect(pass.evaluate(12)).toBe(false);
+  expect(pass.evaluate({ dice: { value: 2 } })).toBe(false);
+  expect(pass.evaluate({ dice: { value: 3 } })).toBe(false);
+  expect(pass.evaluate({ dice: { value: 4 } })).toBe(undefined);
+  expect(pass.evaluate({ dice: { value: 5 } })).toBe(undefined);
+  expect(pass.evaluate({ dice: { value: 6 } })).toBe(undefined);
+  expect(pass.evaluate({ dice: { value: 7 } })).toBe(true);
+  expect(pass.evaluate({ dice: { value: 8 } })).toBe(undefined);
+  expect(pass.evaluate({ dice: { value: 9 } })).toBe(undefined);
+  expect(pass.evaluate({ dice: { value: 10 } })).toBe(undefined);
+  expect(pass.evaluate({ dice: { value: 11 } })).toBe(true);
+  expect(pass.evaluate({ dice: { value: 12 } })).toBe(false);
 
   for (var i=0; i<100; i++) {
     const roll = utils.getRandomRoll();
@@ -31,7 +31,7 @@ test('pass bet evaluation behaves as expects', () => {
     if (roll === point) expected = true;
     if (roll === 7) expected = false;
 
-    expect(pass.evaluate(roll, point)).toBe(expected);
+    expect(pass.evaluate({ point: point, dice: { value: roll } })).toBe(expected);
   }
 });
 
