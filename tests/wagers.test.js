@@ -11,7 +11,8 @@ test('wagers constructor works as expected', () => {
     'eleven',
     'twelve',
     'any7',
-    'anyCraps'
+    'anyCraps',
+    'field'
   ].map(w => expect(wagers[w]).toBe(0));
 
   [

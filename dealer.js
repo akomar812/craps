@@ -9,6 +9,7 @@ const bets = {
   // come: new (require('./bets/come.js'))(),
   any7: new (require('./bets/any7.js'))(),
   anyCraps: new (require('./bets/anycraps.js'))(),
+  field: new (require('./bets/field.js'))(),
   place4: new Place(4),
   place5: new Place(5),
   place6: new Place(6),
@@ -32,6 +33,7 @@ class Dealer {
     const results = {
       pass: bets.pass.evaluate(game.dice.value, game.point),
       // come: bets.come.evaluate(game.dice.value, game.point, game.wagers.come),
+      field: bets.field.evaluate(game),
       place4: bets.place4.evaluate(game.dice.current),
       place5: bets.place5.evaluate(game.dice.current),
       place6: bets.place6.evaluate(game.dice.current),

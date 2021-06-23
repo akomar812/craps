@@ -9,6 +9,7 @@ class Wagers {
     this.twelve = 0;
     this.any7 = 0;
     this.anyCraps = 0;
+    this.field = 0;
 
     this.come = {
       pass: 0,
