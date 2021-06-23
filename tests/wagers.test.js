@@ -6,6 +6,7 @@ test('wagers constructor works as expected', () => {
 
   [
     'pass',
+    'dontpass',
     'two',
     'three',
     'eleven',

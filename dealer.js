@@ -6,6 +6,7 @@ const Single = require('./bets/single.js');
 
 const bets = {
   pass: new (require('./bets/pass.js'))(),
+  dontpass: new (require('./bets/dontpass.js'))(),
   // come: new (require('./bets/come.js'))(),
   any7: new (require('./bets/any7.js'))(),
   anyCraps: new (require('./bets/anycraps.js'))(),
@@ -32,6 +33,7 @@ class Dealer {
   static manage(game) {
     const results = {
       pass: bets.pass.evaluate(game.dice.value, game.point),
+      dontpass: bets.dontpass.evaluate(game),
       // come: bets.come.evaluate(game.dice.value, game.point, game.wagers.come),
       field: bets.field.evaluate(game),
       place4: bets.place4.evaluate(game.dice.current),
@@ -92,7 +94,7 @@ class Dealer {
     const roll = game.dice.value;
     const payout = roll in bet.payout ? bet.payout[roll] : bet.payout['*'];
     const stake = wagerBook[wagerName];
-    //console.log(roll, payout, stake, game.payout)
+    //console.log(wagerName, roll, payout, stake, game.payout)
     game.payout += (stake + (payout * stake));
     wagerBook[wagerName] = 0;
   }

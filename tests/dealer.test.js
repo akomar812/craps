@@ -53,7 +53,7 @@ const multiBetTest = (bet, wagerConfig, payoutFn) => {
         expect(game.wagers.player[bet]).toBe(expected[1]);
       }
     }
-  }
+  };
 };
 
 const propBetTest = (bet, wagerConfig, payoutFn) => {
@@ -123,13 +123,70 @@ test('pass bet lose when point is on', () => {
   expect(game.wagers.player.pass).toBe(0);
 });
 
-test('pass bet no op when point is off', () => {
-  const game = newGameStub([6, 4], 4, basicPassWager());
+test('pass bet no op when point is on', () => {
+  const game = newGameStub([6, 4], utils.getRandomPoint(), basicPassWager());
   Dealer.manage(game);
   expect(game.payout).toBe(0);
-  expect(game.point).toBe(4);
+  expect(game.point).toBe(game.point);
   expect(game.wagers.player.pass).toBe(10);
 });
+
+test('don\'t pass bet lose when point is off', () => {
+  const game = newGameStub([3, 4], null, basicNamedWager('dontpass'));
+  Dealer.manage(game);
+  expect(game.payout).toBe(-10);
+  expect(game.point).toBe(null);
+  expect(game.wagers.player.dontpass).toBe(0);
+});
+
+test('don\'t pass bet win when point is off', () => {
+  const game = newGameStub([1, 1], null, basicNamedWager('dontpass'));
+  Dealer.manage(game);
+  expect(game.payout).toBe(20);
+  expect(game.point).toBe(null);
+  expect(game.wagers.player.dontpass).toBe(0);
+});
+
+test('don\'t pass bet push when point is off', () => {
+  const game = newGameStub([6, 6], null, basicNamedWager('dontpass'));
+  Dealer.manage(game);
+  expect(game.payout).toBe(10);
+  expect(game.point).toBe(null);
+  expect(game.wagers.player.dontpass).toBe(0);
+});
+
+test('don\'t pass bet open when point is off', () => {
+  const game = newGameStub([2, 3], null, basicNamedWager('dontpass'));
+  Dealer.manage(game);
+  expect(game.payout).toBe(0);
+  expect(game.point).toBe(5);
+  expect(game.wagers.player.dontpass).toBe(10);
+});
+
+test('don\'t pass bet lose when point is on', () => {
+  const game = newGameStub([3, 3], 6, basicNamedWager('dontpass'));
+  Dealer.manage(game);
+  expect(game.payout).toBe(-10);
+  expect(game.point).toBe(null);
+  expect(game.wagers.player.dontpass).toBe(0);
+});
+
+test('don\'t pass bet win when point is on', () => {
+  const game = newGameStub([6, 1], utils.getRandomPoint(), basicNamedWager('dontpass'));
+  Dealer.manage(game);
+  expect(game.payout).toBe(20);
+  expect(game.point).toBe(null);
+  expect(game.wagers.player.dontpass).toBe(0);
+});
+
+test('don\'t pass bet no op when point is on', () => {
+  const game = newGameStub([6, 4], utils.getRandomPoint(), basicNamedWager('dontpass'));
+  Dealer.manage(game);
+  expect(game.payout).toBe(0);
+  expect(game.point).toBe(game.point);
+  expect(game.wagers.player.dontpass).toBe(10);
+});
+
 
 // test('come bet win', () => {
 //   const game = newGameStub([5, 2], 5, basicComeWager());
