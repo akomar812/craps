@@ -30,6 +30,10 @@ const bets = {
 };
 
 class Dealer {
+  static getBets() {
+    return bets;
+  }
+
   static manage(game) {
     // compute the results of all bets
     const results = {};

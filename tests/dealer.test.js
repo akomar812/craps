@@ -1,6 +1,7 @@
 'use strict';
 const Dealer = require('../dealer.js');
 const Wagers = require('../wagers.js');
+const Bet = require('../bets');
 const utils = require('./utils.js');
 
 const newGameStub = (roll, pointValue=null, wagers={}) => {
@@ -53,6 +54,16 @@ const propBetTest = (bet, wagerConfig, payoutFn) => {
     }
   };
 };
+
+// test('bets getter', () => {
+//   const game = newGameStub([0, 0], null, basicNamedWager('pass'));
+//   const bets = Dealer.getBets();
+
+//   for (let bet in bets) {
+//     console.log(bets[bet])
+//     expect(bets[bet] instanceof Bet).toBe(true);
+//   }
+// });
 
 test('win payout', () => {
   const game = newGameStub([0, 0], null, basicNamedWager('pass'));

@@ -1,6 +1,7 @@
 'use strict';
 const Craps = require('./craps.js');
 const readline = require('readline');
+const Table = require('cli-table');
 const PS1 = '> ';
 
 const rl = readline.createInterface({
@@ -13,9 +14,9 @@ const handleBet = (game, bet, amount) => {
     return console.log(`Cannot place bet: ${amount}, amount must be positive number`);
   }
 
-  game.Dealer.requestBet(game, game.players.player.wagers, bet, amount) ?
-    console.log(`Successfully placed bet: ${bet} for amount: ${amount}`) :
+  if (!game.Dealer.requestBet(game, game.players.player.wagers, bet, amount)) {
     console.log(`Failed to place bet: ${bet} for amount: ${amount}`);
+  }
 };
 
 const handleRoll = (game) => {
@@ -27,29 +28,48 @@ const handleRoll = (game) => {
   }
 };
 
+const handleStatus = (game) => {
+  const bets = game.Dealer.getBets();
+  const gameTable = new Table();
+  const wagerTable = new Table({ head: [''].concat(Object.keys(bets)) });
+
+  const lastRoll = game.dice.value > 0 ? `${game.dice.value} (${game.dice.current})` : 'none';
+
+  gameTable.push({ 'Last Roll': lastRoll });
+  gameTable.push({ 'Point': game.point ? game.point : 'not set' });
+  gameTable.push({ 'Players': Object.keys(game.players).map(p => `${p} (${game.players[p].pot})`).join('\n') });
+
+  for (let player in game.players) {
+    const playerBets = [];
+
+    for (let bet in bets) {
+      playerBets.push(game.players[player].wagers[bet]);
+    }
+
+    wagerTable.push(
+      { [player]: playerBets }
+    );
+  }
+
+  console.log(gameTable.toString());
+  console.log(wagerTable.toString());
+};
+
 const textInterface = (game, player, msg) => {
+  handleStatus(game);
+
   rl.question(msg, (answer) => {
     const comps = answer.split(' ');
+
     switch(comps[0]) {
     case 'exit':
       return rl.close();
-    case 'status':
-      console.log(`Point currently set to: ${game.point}`);
-      break;
-    case 'pot':
-      console.log(`Current pot value: ${game.players.player.pot}`);
-      break;
-    case 'wagers':
-      game.players.player.wagers.report();
-      break;
     case 'roll':
       handleRoll(game);
       break;
     case 'bet':
       handleBet(game, comps[1], comps[2]);
       break;
-    default:
-      console.log(`Received message: ${answer}`);
     }
 
     textInterface(game, player, PS1);
@@ -57,7 +77,7 @@ const textInterface = (game, player, msg) => {
 };
 
 module.exports = (args) => {
-  const craps = new Craps({ debug: true });
+  const craps = new Craps();
   const player = args.playerName || 'player';
   const pot = args.pot || 1000;
   craps.addPlayer(player, pot);
