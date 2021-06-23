@@ -12,10 +12,10 @@ class Wagers {
     this.anyCraps = 0;
     this.field = 0;
 
-    this.come = {
-      pass: 0,
-      point: null
-    };
+    // this.come = {
+    //   pass: 0,
+    //   point: null
+    // };
 
     this.place4 = 0;
     this.place5 = 0;
@@ -41,6 +41,10 @@ class Wagers {
     }
 
     return false;
+  }
+
+  total() {
+    return Object.keys(this).reduce((sum, bet) => sum + this[bet], 0);
   }
 }
 

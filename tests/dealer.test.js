@@ -67,14 +67,14 @@ const propBetTest = (bet, wagerConfig, payoutFn) => {
 
 test('win payout', () => {
   const game = newGameStub([0, 0], null, basicNamedWager('pass'));
-  Dealer.payoutWin(game, game.players.player.wagers, 'pass');
+  Dealer.payoutWin(game, 'player', 'pass');
   expect(game.players.player.pot).toBe(20);
   expect(game.players.player.wagers.pass).toBe(0);
 });
 
 test('loss payout', () => {
   const game = newGameStub([0, 0], null, basicNamedWager('pass'));
-  Dealer.payoutLoss(game, game.players.player.wagers, 'pass');
+  Dealer.payoutLoss(game, 'player', 'pass');
   expect(game.players.player.pot).toBe(-10);
   expect(game.players.player.wagers.pass).toBe(0);
 });
@@ -336,18 +336,18 @@ test('field bet', propBetTest('field', basicNamedWager('field'), (roll) => {
 test('ability to request bets from the dealer', () => {
   const game = newGameStub([1, 1]);
   game.players.player.pot = 1;
-  expect(Dealer.requestBet(game, game.players.player.wagers, 'pass', 1)).toBe(true);
+  expect(Dealer.requestBet(game, 'player', 'pass', 1)).toBe(true);
   expect(game.players.player.wagers.pass).toBe(1);
 
   game.point = 4;
   game.players.player.pot = 1;
-  expect(Dealer.requestBet(game, game.players.player.wagers, 'pass', 1)).toBe(false);
+  expect(Dealer.requestBet(game, 'player', 'pass', 1)).toBe(false);
   expect(game.players.player.wagers.pass).toBe(1);
 
   game.players.player.pot = 0;
   const spy = jest.spyOn(console, 'log').mockImplementation();
 
-  expect(Dealer.requestBet(game, game.players.player.wagers, 'pass', 1)).toBe(false);
+  expect(Dealer.requestBet(game, 'player', 'pass', 1)).toBe(false);
   expect(game.players.player.wagers.pass).toBe(1);
   expect(spy).toHaveBeenCalledTimes(1);
   expect(spy).toHaveBeenCalledWith('Player\'s pot: 0 cannot support bet: 1');

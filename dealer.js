@@ -35,7 +35,6 @@ class Dealer {
   }
 
   static manage(game) {
-    // compute the results of all bets
     const results = {};
 
     for (let bet in bets) {
@@ -44,21 +43,23 @@ class Dealer {
 
     // if (results.come !== undefined) {
     //   results.come === true ?
-    //     this.payoutWin(game, game.players.player.wagers.come, bets.come, 'pass') :
-    //     this.payoutLoss(game, game.players.player.wagers.come, 'pass');
+    //     this.payoutWin(game, player, 'pass') :
+    //     this.payoutLoss(game, player, 'pass');
     // }
 
-    for (let bet in bets) {
-      if (bets[bet].type === 'multi') {
-        if (results[bet] === true) {
-          this.payoutWin(game, game.players.player.wagers, bet);
-        } else if (results[bet] === false) {
-          this.payoutLoss(game, game.players.player.wagers, bet);
+    for (let player in game.players) {
+      for (let bet in bets) {
+        if (bets[bet].type === 'multi') {
+          if (results[bet] === true) {
+            this.payoutWin(game, player, bet);
+          } else if (results[bet] === false) {
+            this.payoutLoss(game, player, bet);
+          }
+        } else {
+          results[bet] === true ?
+            this.payoutWin(game, player, bet) :
+            this.payoutLoss(game, player, bet);
         }
-      } else {
-        results[bet] === true ?
-          this.payoutWin(game, game.players.player.wagers, bet) :
-          this.payoutLoss(game, game.players.player.wagers, bet);
       }
     }
 
@@ -69,28 +70,27 @@ class Dealer {
     }
   }
 
-  static payoutWin(game, wagers, bet) {
+  static payoutWin(game, player, bet) {
     const roll = game.dice.value;
     const payout = roll in bets[bet].payout ? bets[bet].payout[roll] : bets[bet].payout['*'];
-    const stake = wagers[bet];
-    //console.log(wagerName, roll, payout, stake, game.payout)
-    game.players.player.pot += (stake + (payout * stake));
-    wagers[bet] = 0;
+    const stake = game.players[player].wagers[bet];
+    game.players[player].pot += (stake + (payout * stake));
+    game.players[player].wagers[bet] = 0;
   }
 
-  static payoutLoss(game, wagers, bet) {
-    game.players.player.pot -= wagers[bet];
-    wagers[bet] = 0;
+  static payoutLoss(game, player, bet) {
+    game.players[player].pot -= game.players[player].wagers[bet];
+    game.players[player].wagers[bet] = 0;
   }
 
-  static requestBet(game, wagers, bet, amount) {
-    if (game.players.player.pot < amount) {
-      console.log(`Player's pot: ${game.players.player.pot} cannot support bet: ${amount}`);
+  static requestBet(game, player, bet, amount) {
+    if (game.players[player].pot < amount) {
+      console.log(`Player's pot: ${game.players[player].pot} cannot support bet: ${amount}`);
       return false;
     }
 
     if (bets[bet].isAllowingWagers(game)) {
-      wagers[bet] += parseFloat(amount);
+      game.players[player].wagers[bet] += parseFloat(amount);
       return true;
     }
 
