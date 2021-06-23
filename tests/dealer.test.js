@@ -335,6 +335,12 @@ test('ability to request bets from the dealer', () => {
   expect(game.players.player.wagers.pass).toBe(1);
 
   game.players.player.pot = 0;
+  const spy = jest.spyOn(console, 'log').mockImplementation();
+
   expect(Dealer.requestBet(game, game.players.player.wagers, 'pass', 1)).toBe(false);
   expect(game.players.player.wagers.pass).toBe(1);
+  expect(spy).toHaveBeenCalledTimes(1);
+  expect(spy).toHaveBeenCalledWith('Player\'s pot: 0 cannot support bet: 1');
+
+  spy.mockRestore();
 });

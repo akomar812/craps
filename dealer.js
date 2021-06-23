@@ -88,7 +88,7 @@ class Dealer {
 
   static requestBet(game, wagerBook, name, amount) {
     if (game.players.player.pot < amount) {
-      console.log(`Player's pot: ${game.players.player.pot} can not support bet: ${amount}`);
+      console.log(`Player's pot: ${game.players.player.pot} cannot support bet: ${amount}`);
       return false;
     }
 
