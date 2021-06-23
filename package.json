@@ -10,6 +10,7 @@
     "craps": "./bin/craps"
   },
   "dependencies": {
+    "cli-table": "^0.3.6",
     "jest": "^27.0.4"
   },
   "devDependencies": {
