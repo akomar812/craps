@@ -54,6 +54,22 @@ class Wagers {
 
     return false;
   }
+
+  report() {
+    for (let key in this) {
+      if (Number.isInteger(this[key])) {
+        if (this[key] > 0) {
+          console.log(`${key}: ${this[key]}`);
+        }
+      } else {
+        for (let subkey in this[key]) {
+          if (this[key][subkey] > 0) {
+            console.log(`${key}${subkey}: ${this[key][subkey]}`);
+          }
+        }
+      }
+    }
+  }
 }
 
 module.exports = Wagers;
