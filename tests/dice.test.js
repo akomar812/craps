@@ -93,7 +93,7 @@ test('debug dice roll', () => {
 
   dice.roll();
   expect(spy).toHaveBeenCalledTimes(1);
-  expect(spy).toHaveBeenCalledWith('rolled:', dice.value);
+  expect(spy).toHaveBeenCalledWith('Rolled:', dice.value, dice.current);
 
   spy.mockRestore();
 });

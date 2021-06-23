@@ -21,66 +21,44 @@ test('wagers constructor works as expected', () => {
     '8',
     '9',
     '10'
-  ].map(w => expect(wagers.place[w]).toBe(0));
+  ].map(w => expect(wagers['place'+w]).toBe(0));
 
   [
     '6',
     '8'
-  ].map(w => expect(wagers.big[w]).toBe(0));
+  ].map(w => expect(wagers['big'+w]).toBe(0));
 
   [
     '4',
     '6',
     '8',
     '10'
-  ].map(w => expect(wagers.hard[w]).toBe(0));
+  ].map(w => expect(wagers['hard'+w]).toBe(0));
 });
 
-test('pass bets activates wagers', () => {
+test('bets cause wager book to activate', () => {
   const wagers = new Wagers();
-  expect(wagers.isActive()).toBe(false);
-  wagers.pass = 10;
-  expect(wagers.isActive()).toBe(true);
+
+  for (let bet in wagers) {
+    const w = new Wagers();
+    expect(w.isActive()).toBe(false);
+    w[bet] = 10;
+    expect(w.isActive()).toBe(true);
+  }
 });
 
-test('two bets activates wagers', () => {
+test('bets cause wager book to activate', () => {
   const wagers = new Wagers();
-  expect(wagers.isActive()).toBe(false);
-  wagers.two = 10;
-  expect(wagers.isActive()).toBe(true);
-});
+  const spy = jest.spyOn(console, 'log').mockImplementation();
 
-test('three bets activates wagers', () => {
-  const wagers = new Wagers();
-  expect(wagers.isActive()).toBe(false);
+  wagers.hard4 = 1;
+  wagers.place9 = 2;
   wagers.three = 10;
-  expect(wagers.isActive()).toBe(true);
-});
-
-test('eleven bets activates wagers', () => {
-  const wagers = new Wagers();
-  expect(wagers.isActive()).toBe(false);
-  wagers.eleven = 10;
-  expect(wagers.isActive()).toBe(true);
-});
-
-test('twelve bets activates wagers', () => {
-  const wagers = new Wagers();
-  expect(wagers.isActive()).toBe(false);
-  wagers.twelve = 10;
-  expect(wagers.isActive()).toBe(true);
-});
-
-test('any7 bets activates wagers', () => {
-  const wagers = new Wagers();
-  expect(wagers.isActive()).toBe(false);
-  wagers.any7 = 10;
-  expect(wagers.isActive()).toBe(true);
-});
-
-test('anyCraps bets activates wagers', () => {
-  const wagers = new Wagers();
-  expect(wagers.isActive()).toBe(false);
-  wagers.anyCraps = 10;
-  expect(wagers.isActive()).toBe(true);
+  wagers.report();
+  expect(spy).toHaveBeenCalledTimes(3);
+  expect(spy).toHaveBeenNthCalledWith(1, `three: ${10}`);
+  expect(spy).toHaveBeenNthCalledWith(2, `place9: ${2}`);
+  expect(spy).toHaveBeenNthCalledWith(3, `hard4: ${1}`);
+  
+  spy.mockRestore();
 });

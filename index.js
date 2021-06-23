@@ -1,7 +1,6 @@
 'use strict';
 const Craps = require('./craps.js');
 const readline = require('readline');
-const Dealer = require('./dealer.js');
 const PS1 = '> ';
 
 const rl = readline.createInterface({
@@ -9,12 +8,34 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+const handleBet = (game, bet, amount) => {
+  if (!Number.isFinite(parseFloat(amount)) || parseFloat(amount) <= 0) {
+    return console.log(`Cannot place bet: ${amount}, amount must be positive number`);
+  }
+
+  game.Dealer.requestBet(game, game.wagers.player, bet, amount) ?
+    console.log(`Successfully placed bet: ${bet} for amount: ${amount}`) :
+    console.log(`Failed to place bet: ${bet} for amount: ${amount}`);
+};
+
+const handleRoll = (game) => {
+  if (game.wagers.player.isActive()) {
+    game.dice.roll();
+    game.Dealer.manage(game);
+  } else {
+    console.log('A bet must be placed before the dice can be rolled');
+  }
+};
+
 const textInterface = (game, player, msg) => {
   rl.question(msg, (answer) => {
     const comps = answer.split(' ');
     switch(comps[0]) {
     case 'exit':
       return rl.close();
+    case 'status':
+      console.log(`Point currently set to: ${game.point}`);
+      break;
     case 'pot':
       console.log(`Current pot value: ${game.payout}`);
       break;
@@ -22,24 +43,10 @@ const textInterface = (game, player, msg) => {
       game.wagers.player.report();
       break;
     case 'roll':
-      if (game.wagers.player.isActive()) {
-        game.dice.roll();
-        console.log(`${player} rolled: ${game.dice.value} (${game.dice.current})`);
-        Dealer.manage(game);
-      } else {
-        console.log('A bet must be placed before the dice can be rolled');
-      }
+      handleRoll(game);
       break;
     case 'bet':
-      if (!Number.isFinite(parseFloat(comps[2])) || parseFloat(comps[2]) <= 0) {
-        console.log(`Cannot place bet: ${comps[2]}, amount must be positive number`);
-        break;
-      }
-
-      game.Dealer.requestBet(game, game.wagers.player, comps[1], comps[2]) ?
-        console.log(`Successfully placed bet: ${comps[1]} for amount: ${comps[2]}`) :
-        console.log(`Failed to place bet: ${comps[1]} for amount: ${comps[2]}`);
-
+      handleBet(game, comps[1], comps[2]);
       break;
     default:
       console.log(`Received message: ${answer}`);
@@ -50,7 +57,7 @@ const textInterface = (game, player, msg) => {
 };
 
 module.exports = (args) => {
-  const craps = new Craps();
+  const craps = new Craps({ debug: true });
   const player = args.playerName || 'player';
   craps.addPlayer(player);
   textInterface(craps, player, `${player} connected to craps table...\n${PS1}`);

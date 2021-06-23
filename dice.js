@@ -14,7 +14,7 @@ class DicePair {
   roll() {
     this.current = [DicePair._getRoll(), DicePair._getRoll()];
     this.value = this.current[0] + this.current[1];
-    if (this.debug) console.log('rolled:', this.value);
+    if (this.debug) console.log('Rolled:', this.value, this.current);
     return this;
   }
 }

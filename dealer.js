@@ -72,13 +72,10 @@ class Dealer {
     for (let bet in bets) {
       if (['pass', 'come'].indexOf(bet) < 0) {
         if (bets[bet].type === 'multi') {
-          const betNum = bet.match(/\d+/g);
-          const betName =  bet.match(/[a-zA-Z]+/g);
-
           if (results[bet] === true) {
-            this.payoutWin(game, game.wagers.player[betName], bets[bet], betNum);
+            this.payoutWin(game, game.wagers.player, bets[bet], bet);
           } else if (results[bet] === false) {
-            this.payoutLoss(game, game.wagers.player[betName], betNum);
+            this.payoutLoss(game, game.wagers.player, bet);
           }
         } else {
           results[bet] === true ?

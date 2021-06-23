@@ -15,40 +15,26 @@ class Wagers {
       point: null
     };
 
-    this.place = {
-      '4': 0,
-      '5': 0,
-      '6': 0,
-      '8': 0,
-      '9': 0,
-      '10': 0
-    };
+    this.place4 = 0;
+    this.place5 = 0;
+    this.place6 = 0;
+    this.place8 = 0;
+    this.place9 = 0;
+    this.place10 = 0;
 
-    this.big = {
-      '6': 0,
-      '8': 0
-    };
+    this.big6 = 0;
+    this.big8 = 0;
 
-    this.hard = {
-      '4': 0,
-      '6': 0,
-      '8': 0,
-      '10': 0
-    };
+    this.hard4 = 0;
+    this.hard6 = 0;
+    this.hard8 = 0;
+    this.hard10 = 0;
   }
 
   isActive() {
     for (let key in this) {
-      if (Number.isInteger(this[key])) {
-        if (this[key] > 0) {
-          return true;
-        }
-      } else {
-        for (let subkey in this[key]) {
-          if (this[key][subkey] > 0) {
-            return true;
-          }
-        }
+      if (this[key] > 0) {
+        return true;
       }
     }
 
@@ -57,16 +43,8 @@ class Wagers {
 
   report() {
     for (let key in this) {
-      if (Number.isInteger(this[key])) {
-        if (this[key] > 0) {
-          console.log(`${key}: ${this[key]}`);
-        }
-      } else {
-        for (let subkey in this[key]) {
-          if (this[key][subkey] > 0) {
-            console.log(`${key}${subkey}: ${this[key][subkey]}`);
-          }
-        }
+      if (this[key] > 0) {
+        console.log(`${key}: ${this[key]}`);
       }
     }
   }

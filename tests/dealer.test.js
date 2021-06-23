@@ -26,27 +26,16 @@ const basicPassWager = () => {
 //   return { come: { pass: 10, point: null } };
 // };
 
-const basicPlaceWager = (n) => {
-  const bets = [4, 5, 6, 8, 9, 10];
-  const wagers = {};
-
-  for (let i=0; i<bets.length; i++) {
-    wagers[bets[i]] = bets[i] === n ? 10 : 0;
-  }
-
-  return { place: wagers };
+const basicPlaceWager = (bet) => {
+  return { place4: 0, place5: 0, place6: 0, place8: 0, place9: 0, place10: 0, ...{ [bet]: 10 } };
 };
 
-const basicBigWager = (n) => {
-  const wager = { big: { '6': 0, '8': 0 } };
-  wager.big[n] = 10;
-  return wager;
+const basicBigWager = (bet) => {
+  return { big6: 0, big8: 0, ...{ [bet]: 10 } };
 };
 
-const basicHardWager = (n) => {
-  const wager = { hard: { '4': 0, '6': 0, '8': 0, '10': 0 } };
-  wager.hard[n] = 10;
-  return wager;
+const basicHardWager = (bet) => {
+  return { hard4: 0, hard6: 0, hard8: 0, hard10: 0, ...{ [bet]: 10 } };
 };
 
 const basicNamedWager = (name) => {
@@ -165,7 +154,7 @@ test('pass bet no op when point is off', () => {
 test('place 4 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicPlaceWager(4));
+      const game = newGameStub([i, j], 9, basicPlaceWager('place4'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -180,7 +169,7 @@ test('place 4 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.place['4']).toBe(expectedWager);
+      expect(game.wagers.player.place4).toBe(expectedWager);
     }
   }
 });
@@ -188,7 +177,7 @@ test('place 4 bet', () => {
 test('place 5 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicPlaceWager(5));
+      const game = newGameStub([i, j], 9, basicPlaceWager('place5'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -203,7 +192,7 @@ test('place 5 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.place['5']).toBe(expectedWager);
+      expect(game.wagers.player.place5).toBe(expectedWager);
     }
   }
 });
@@ -211,7 +200,7 @@ test('place 5 bet', () => {
 test('place 6 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicPlaceWager(6));
+      const game = newGameStub([i, j], 9, basicPlaceWager('place6'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -226,7 +215,7 @@ test('place 6 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.place['6']).toBe(expectedWager);
+      expect(game.wagers.player.place6).toBe(expectedWager);
     }
   }
 });
@@ -234,7 +223,7 @@ test('place 6 bet', () => {
 test('place 8 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicPlaceWager(8));
+      const game = newGameStub([i, j], 9, basicPlaceWager('place8'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -249,7 +238,7 @@ test('place 8 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.place['8']).toBe(expectedWager);
+      expect(game.wagers.player.place8).toBe(expectedWager);
     }
   }
 });
@@ -257,7 +246,7 @@ test('place 8 bet', () => {
 test('place 9 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicPlaceWager(9));
+      const game = newGameStub([i, j], 9, basicPlaceWager('place9'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -272,7 +261,7 @@ test('place 9 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.place['9']).toBe(expectedWager);
+      expect(game.wagers.player.place9).toBe(expectedWager);
     }
   }
 });
@@ -280,7 +269,7 @@ test('place 9 bet', () => {
 test('place 10 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicPlaceWager(10));
+      const game = newGameStub([i, j], 9, basicPlaceWager('place10'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -295,7 +284,7 @@ test('place 10 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.place['10']).toBe(expectedWager);
+      expect(game.wagers.player.place10).toBe(expectedWager);
     }
   }
 });
@@ -303,7 +292,7 @@ test('place 10 bet', () => {
 test('big 6 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicBigWager(6));
+      const game = newGameStub([i, j], 9, basicBigWager('big6'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -318,7 +307,7 @@ test('big 6 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.big['6']).toBe(expectedWager);
+      expect(game.wagers.player.big6).toBe(expectedWager);
     }
   }
 });
@@ -326,7 +315,7 @@ test('big 6 bet', () => {
 test('big 8 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicBigWager(8));
+      const game = newGameStub([i, j], 9, basicBigWager('big8'));
       Dealer.manage(game);
 
       let expectedPayout = 0;
@@ -341,7 +330,7 @@ test('big 8 bet', () => {
       }
 
       expect(game.payout).toBe(expectedPayout);
-      expect(game.wagers.player.big['8']).toBe(expectedWager);
+      expect(game.wagers.player.big8).toBe(expectedWager);
     }
   }
 });
@@ -349,7 +338,7 @@ test('big 8 bet', () => {
 test('hard 4 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicHardWager(4));
+      const game = newGameStub([i, j], 9, basicHardWager('hard4'));
       Dealer.manage(game);
 
       const ex = utils.getHardWayExpectedValue(i, j, 4);
@@ -364,7 +353,7 @@ test('hard 4 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.player.hard['4']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard4).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
@@ -372,7 +361,7 @@ test('hard 4 bet', () => {
 test('hard 6 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicHardWager(6));
+      const game = newGameStub([i, j], 9, basicHardWager('hard6'));
       Dealer.manage(game);
 
       const ex = utils.getHardWayExpectedValue(i, j, 6);
@@ -387,7 +376,7 @@ test('hard 6 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.player.hard['6']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard6).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
@@ -395,7 +384,7 @@ test('hard 6 bet', () => {
 test('hard 8 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicHardWager(8));
+      const game = newGameStub([i, j], 9, basicHardWager('hard8'));
       Dealer.manage(game);
 
       const ex = utils.getHardWayExpectedValue(i, j, 8);
@@ -410,7 +399,7 @@ test('hard 8 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.player.hard['8']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard8).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
@@ -418,7 +407,7 @@ test('hard 8 bet', () => {
 test('hard 10 bet', () => {
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      const game = newGameStub([i, j], 9, basicHardWager(10));
+      const game = newGameStub([i, j], 9, basicHardWager('hard10'));
       Dealer.manage(game);
 
       const ex = utils.getHardWayExpectedValue(i, j, 10);
@@ -433,7 +422,7 @@ test('hard 10 bet', () => {
       }
 
       expect(game.payout).toBe(expected);
-      expect(game.wagers.player.hard['10']).toBe(expected === 0 ? 10 : 0);
+      expect(game.wagers.player.hard10).toBe(expected === 0 ? 10 : 0);
     }
   }
 });
