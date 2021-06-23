@@ -341,10 +341,16 @@ test('field bet', propBetTest('field', basicNamedWager('field'), (roll) => {
 
 test('ability to request bets from the dealer', () => {
   const game = newGameStub([1, 1]);
+  game.players.player.pot = 1;
   expect(Dealer.requestBet(game, game.players.player.wagers, 'pass', 1)).toBe(true);
   expect(game.players.player.wagers.pass).toBe(1);
 
   game.point = 4;
+  game.players.player.pot = 1;
+  expect(Dealer.requestBet(game, game.players.player.wagers, 'pass', 1)).toBe(false);
+  expect(game.players.player.wagers.pass).toBe(1);
+
+  game.players.player.pot = 0;
   expect(Dealer.requestBet(game, game.players.player.wagers, 'pass', 1)).toBe(false);
   expect(game.players.player.wagers.pass).toBe(1);
 });

@@ -1,6 +1,6 @@
 'use strict';
 const Strategy = require('../strategies/basic_pass_line.js');
-const Craps = require('../craps.js');
+//const Craps = require('../craps.js');
 
 test('basic pass line strategy constructor', () => {
   const strategy = new Strategy({ amount: 11 });

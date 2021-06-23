@@ -105,6 +105,11 @@ class Dealer {
   }
 
   static requestBet(game, wagerBook, name, amount) {
+    if (game.players.player.pot < amount) {
+      console.log(`Player's pot: ${game.players.player.pot} can not support bet: ${amount}`);
+      return false;
+    }
+
     if (bets[name].isAllowingWagers(game)) {
       wagerBook[name] += parseFloat(amount);
       return true;
