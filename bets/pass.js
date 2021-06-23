@@ -31,6 +31,11 @@ class Pass extends Bet {
       return false;
     }
   }
+
+  // wagers should only be allowed when the point isn't set
+  isAllowingWagers(game) {
+    return game.point === null;
+  }
 }
 
 module.exports = Pass;

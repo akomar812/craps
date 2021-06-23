@@ -20,6 +20,7 @@ test('bet constructor works as expected', () => {
   const bet = new Bet({ type: 'multi', houseEdge: .0001 });
   expect(bet.type).toBe('multi');
   expect(bet.houseEdge).toBe(.0001);
+  expect(bet.isAllowingWagers()).toBe(true);
 
   const spy = jest.spyOn(console, 'warn').mockImplementation();
   bet.evaluate();

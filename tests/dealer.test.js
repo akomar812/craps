@@ -461,3 +461,13 @@ test('any 7 bet', propBetTest('any7', basicNamedWager('any7'), (roll) => {
 test('any craps bet', propBetTest('anyCraps', basicNamedWager('anyCraps'), (roll) => {
   return [2, 3, 12].indexOf(roll) >= 0 ? 80 : -10;
 }));
+
+test('ability to request bets from the dealer', () => {
+  const game = newGameStub([1, 1]);
+  expect(Dealer.requestBet(game, game.wagers.player, 'pass', 1)).toBe(true);
+  expect(game.wagers.player.pass).toBe(1);
+
+  game.point = 4;
+  expect(Dealer.requestBet(game, game.wagers.player, 'pass', 1)).toBe(false);
+  expect(game.wagers.player.pass).toBe(1);
+});

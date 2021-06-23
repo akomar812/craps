@@ -102,6 +102,15 @@ class Dealer {
     game.payout -= wagerBook[wagerName];
     wagerBook[wagerName] = 0;
   }
+
+  static requestBet(game, wagerBook, name, amount) {
+    if (bets[name].isAllowingWagers(game)) {
+      wagerBook[name] += parseFloat(amount);
+      return true;
+    }
+
+    return false;
+  }
 }
 
 module.exports = Dealer;

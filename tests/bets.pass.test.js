@@ -34,3 +34,9 @@ test('pass bet evaluation behaves as expects', () => {
     expect(pass.evaluate(roll, point)).toBe(expected);
   }
 });
+
+test('pass bet only allows wagers when point is unset', () => {
+  const pass = new Pass();;
+  expect(pass.isAllowingWagers({ point: null })).toBe(true);
+  expect(pass.isAllowingWagers({ point: utils.getRandomPoint() })).toBe(false);
+});
