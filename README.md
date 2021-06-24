@@ -5,7 +5,7 @@ as a 3rd party module which can be played with multiple players such as in a dis
 # Usage
 
 ## CLI
-Use this mode if you just want to play a quick game of craps from the command line
+Use this mode if you just want to play a quick, single-player game of craps from the command line.
 
 First time install:
 
@@ -25,7 +25,7 @@ player connected to craps table...
 The text interface below describes how to control the game
 
 ## Import
-Use this mode if you want to integrate the craps game into another application
+Use this mode if you want to integrate the craps game into another application to play single/multi-player
 
 ```
   const craps = require('craps').asyncInterface;
