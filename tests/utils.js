@@ -24,7 +24,7 @@ module.exports.getBigBetExpectedValue = (d0, d1, target) => {
 module.exports.getHardWayExpectedValue = (d0, d1, target) => {
   if (d0 === d1 && d0 + d1 === target) {
     return true;
-  } else if (d0 + d1 === target) {
+  } else if (d0 + d1 === target || d0 + d1 === 7) {
     return false;
   }
 };

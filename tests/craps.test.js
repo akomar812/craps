@@ -9,6 +9,7 @@ test('craps constructor works as expected', () => {
   expect(craps.dice instanceof Dice).toBe(true);
   expect(craps.mode).toBe('single');
   expect(craps.point).toBe(null);
+  expect(craps.shooter).toBe(null);
 });
 
 test('players can be added and not duplicated', () => {
@@ -16,6 +17,15 @@ test('players can be added and not duplicated', () => {
   craps.addPlayer('player');
   expect(craps.players.player.wagers instanceof Wagers).toBe(true);
   expect(() => craps.addPlayer('player')).toThrow(new Error('A player named player already exists'));
+});
+
+test('players can be removed and there are no consequenses for removing non-existent players', () => {
+  const craps = new Craps();
+  craps.addPlayer('player');
+  expect(craps.players.player.wagers instanceof Wagers).toBe(true);
+  craps.removePlayer('player');
+  expect(!('player' in craps.players)).toBe(true);
+  craps.removePlayer('player');
 });
 
 test('craps games can be restarted', () => {

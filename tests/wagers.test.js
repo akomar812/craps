@@ -48,3 +48,18 @@ test('bets cause wager book to activate', () => {
     expect(w.isActive()).toBe(true);
   }
 });
+
+test('bets cause wager book to activate', () => {
+  const wagers = new Wagers();
+  let expectedTotal = 0;
+
+  for (let bet in wagers) {
+    if (Math.floor(2*Math.random()) === 1) {
+      const amt = Math.floor(100 * Math.random());
+      expectedTotal += amt;
+      wagers[bet] += amt;
+    }
+  }
+
+  expect(wagers.total()).toBe(expectedTotal);
+});

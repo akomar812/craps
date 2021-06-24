@@ -17,8 +17,7 @@
     "eslint": "^7.29.0"
   },
   "scripts": {
-    "test": "jest",
-    "coverage": "jest --coverage --verbose",
+    "test": "jest --coverage --verbose --detectOpenHandles",
     "lint": "npx eslint ."
   },
   "author": "andrew komar",

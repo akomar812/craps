@@ -4,6 +4,10 @@ const Big = require('./bets/big.js');
 const HardWay = require('./bets/hardway.js');
 const Single = require('./bets/single.js');
 
+const mod = (n, m) => {
+  return ((n%m)+m)%m;
+};
+
 const bets = {
   pass: new (require('./bets/pass.js'))(),
   dontpass: new (require('./bets/dontpass.js'))(),
@@ -65,9 +69,21 @@ class Dealer {
 
     if (results.pass !== undefined) {
       game.point = null;
+
+      if (game.dice.value === 7) {
+        game.newGame();
+      }
     } else if (game.point === null) {
       game.point = game.dice.value;
     }
+  }
+
+  static keepAlive(game, player) {
+    if (player in game.players && game.players[player].timeout) clearTimeout(game.players[player].timeout);
+
+    game.players[player].timeout = setTimeout(() => {
+      this.requestPlayerRemoval(game, player);
+    }, 60000);
   }
 
   static payoutWin(game, player, bet) {
@@ -81,6 +97,42 @@ class Dealer {
   static payoutLoss(game, player, bet) {
     game.players[player].pot -= game.players[player].wagers[bet];
     game.players[player].wagers[bet] = 0;
+  }
+
+  static requestPlayerJoin(game, player) {
+    game.addPlayer(player);
+
+    if (player in game.saved) {
+      game.players[player].pot = game.saved[player];
+    }
+
+    if (game.shooter === null) {
+      game.shooter = player;
+    }
+
+    game.rotation.push(player);
+    Dealer.keepAlive(game, player);
+  }
+
+  static requestPlayerRemoval(game, player) {
+    if (player in game.players) {
+      game.saved[player] = game.players[player].pot;
+
+      if (game.shooter === player) {
+        if (Object.keys(game.players).length > 1) {
+          const nextPlayerIndex = mod(game.rotation.indexOf(game.shooter) + 1, game.rotation.length);
+          game.shooter = game.rotation[nextPlayerIndex];
+        } else {
+          game.shooter = null;
+        }
+      }
+
+      game.removePlayer(player);
+
+      if (game.rotation.indexOf(player) >= 0) {
+        game.rotation.splice(game.rotation.indexOf(player), 1);
+      }
+    }
   }
 
   static requestBet(game, player, bet, amount) {

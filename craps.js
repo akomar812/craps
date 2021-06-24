@@ -14,6 +14,8 @@ class Craps {
     this.Dealer = Dealer;
     this.dice = new Dice({ debug: this.debug });
     this.players = {};
+    this.saved = {};
+    this.rotation = [];
     this.point = null;
     this.shooter = null;
   }
@@ -24,10 +26,6 @@ class Craps {
     }
 
     this.players[name] = { pot: pot, wagers: new Wagers() };
-
-    if (this.shooter === null) {
-      this.shooter = name;
-    }
   }
 
   removePlayer(name) {
@@ -35,15 +33,14 @@ class Craps {
   }
 
   newGame() {
-    const players = Object.keys(this.players);
-    const nextPlayerIndex = mod(players.indexOf(this.shooter) + 1, players.length);
+    const nextPlayerIndex = mod(this.rotation.indexOf(this.shooter) + 1, this.rotation.length);
     this.point = null;
 
     for (let player in this.players) {
       this.players[player].wagers = new Wagers();
     }
 
-    this.shooter = players[nextPlayerIndex];
+    this.shooter = this.rotation[nextPlayerIndex];
   }
 }
 

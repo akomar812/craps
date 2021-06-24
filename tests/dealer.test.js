@@ -8,6 +8,8 @@ const newGameStub = (roll, pointValue=null, wagers={}) => {
   return {
     dice: { value: roll[0]+roll[1], current: roll },
     point: pointValue,
+    shooter: null,
+    rotation: ['player'],
     players: {
       player: {
         pot: 0,
@@ -16,8 +18,36 @@ const newGameStub = (roll, pointValue=null, wagers={}) => {
           ...wagers
         })
       }
+    },
+
+    addPlayer: function(name, pot=100) {
+      if (name in this.players) {
+        throw new Error(`A player named ${name} already exists`);
+      }
+
+      this.players[name] = { pot: pot, wagers: new Wagers() };
+    },
+
+    removePlayer: function(name) {
+      delete this.players[name];
+    },
+
+    newGame: function() {
+      const players = Object.keys(this.players);
+      const nextPlayerIndex = mod(players.indexOf(this.shooter) + 1, players.length);
+      this.point = null;
+  
+      for (let player in this.players) {
+        this.players[player].wagers = new Wagers();
+      }
+  
+      this.shooter = players[nextPlayerIndex];
     }
   };
+};
+
+const mod = (n, m) => {
+  return ((n%m)+m)%m;
 };
 
 // const basicComeWager = () => {
@@ -33,9 +63,18 @@ const multiBetTest = (bet, wagerConfig, payoutFn) => {
     for (let i=1; i<=6; i++) {
       for (let j=1; j<=6; j++) {
         const game = newGameStub([i, j], utils.getRandomPoint(), wagerConfig);
+        // const game = new Craps();
+
+        // game.point = utils.getRandomPoint();
+        // game.dice.value = i + j;
+        // game.dice.current = [i, j];
+        // game.addPlayer('player', 0);
+        
+
         Dealer.manage(game);
         const expected = payoutFn([i, j]);
         expect(game.players.player.pot).toBe(expected[0]);
+        if (game.players.player.wagers[bet] !== expected[1]) console.log([i, j], game);
         expect(game.players.player.wagers[bet]).toBe(expected[1]);
       }
     }
@@ -267,10 +306,8 @@ test('big 8 bet', multiBetTest('big8', basicNamedWager('big8'), (dice) => {
 }));
 
 test('hard 4 bet', multiBetTest('hard4', basicNamedWager('hard4'), (dice) => {
-  const ex = utils.getHardWayExpectedValue(dice[0], dice[1], 4);
-
-  if (ex === true) return [80, 0];
-  else if (ex === false) return [-10, 0];
+  if (4 === dice[0] + dice[1] && dice[0] === dice[1]) return [80, 0];
+  else if (4 === dice[0] + dice[1] || 7 === dice[0] + dice[1]) return [-10, 0];
   else return [0, 10];
 }));
 
@@ -353,4 +390,130 @@ test('ability to request bets from the dealer', () => {
   expect(spy).toHaveBeenCalledWith('Player\'s pot: 0 cannot support bet: 1');
 
   spy.mockRestore();
+});
+
+test('ability to request player addition from dealer', () => {
+  const game = newGameStub([1, 1], null, null);
+  Dealer.requestPlayerRemoval(game, 'player');
+
+  // before 1st player
+  expect('player' in game.players).toBe(false);
+  expect(game.shooter).toBe(null);
+
+  Dealer.requestPlayerJoin(game, 'player');
+
+  // after 1st player
+  expect('player' in game.players).toBe(true);
+  expect(game.shooter).toBe('player');
+
+  // before 2nd player
+  expect('player1' in game.players).toBe(false);
+  expect(game.shooter).toBe('player');
+
+  Dealer.requestPlayerJoin(game, 'player1');
+
+  // after 2nd player
+  expect('player1' in game.players).toBe(true);
+  expect(game.shooter).toBe('player');
+
+  // cannot have duplicate player
+  expect(() => Dealer.requestPlayerJoin(game, 'player')).toThrow('A player named player already exists');
+});
+
+test('ability to request player removal from dealer', () => {
+  const game = newGameStub([1, 1], null, null);
+  Dealer.requestPlayerRemoval(game, 'player');
+
+  // before player added
+  expect('player' in game.players).toBe(false);
+  expect(game.shooter).toBe(null);
+
+  Dealer.requestPlayerJoin(game, 'player');
+
+  // after player added
+  expect('player' in game.players).toBe(true);
+  expect(game.shooter).toBe('player');
+
+  Dealer.requestPlayerRemoval(game, 'player');
+
+  // after player removed
+  expect('player' in game.players).toBe(false);
+  expect(game.shooter).toBe(null);
+});
+
+test('dealer management of rotation', () => {
+  const game = newGameStub([1, 1], null, null);
+  Dealer.requestPlayerRemoval(game, 'player');
+
+  // before player added
+  expect('player' in game.players).toBe(false);
+  expect('player1' in game.players).toBe(false);
+  expect('player2' in game.players).toBe(false);
+  expect('player3' in game.players).toBe(false);
+  expect('player4' in game.players).toBe(false);
+  expect('player5' in game.players).toBe(false);
+  expect(game.shooter).toBe(null);
+
+  Dealer.requestPlayerJoin(game, 'player');
+  Dealer.requestPlayerJoin(game, 'player1');
+  Dealer.requestPlayerJoin(game, 'player2');
+  Dealer.requestPlayerJoin(game, 'player3');
+  Dealer.requestPlayerJoin(game, 'player4');
+  Dealer.requestPlayerJoin(game, 'player5');
+
+  // after player added
+  expect('player' in game.players).toBe(true);
+  expect('player1' in game.players).toBe(true);
+  expect('player2' in game.players).toBe(true);
+  expect('player3' in game.players).toBe(true);
+  expect('player4' in game.players).toBe(true);
+  expect('player5' in game.players).toBe(true);
+  expect(game.shooter).toBe('player');
+  expect(game.rotation).toStrictEqual(['player', 'player1', 'player2', 'player3', 'player4', 'player5']);
+
+  Dealer.requestPlayerRemoval(game, 'player');
+
+  //// after player removed
+  expect('player' in game.players).toBe(false);
+  expect(game.rotation).toStrictEqual(['player1', 'player2', 'player3', 'player4', 'player5']);
+  expect(game.shooter).toBe('player1');
+
+  Dealer.requestPlayerRemoval(game, 'player3');
+
+  //// after player removed
+  expect('player' in game.players).toBe(false);
+  expect(game.rotation).toStrictEqual(['player1', 'player2', 'player4', 'player5']);
+  expect(game.shooter).toBe('player1');
+
+  game.dice.value = 7;
+  Dealer.manage(game);
+
+  //// after 7 rolled shooter should increment
+  expect('player' in game.players).toBe(false);
+  expect(game.rotation).toStrictEqual(['player1', 'player2', 'player4', 'player5']);
+  expect(game.shooter).toBe('player2');
+
+  Dealer.manage(game);
+  expect(game.shooter).toBe('player4');
+
+  Dealer.manage(game);
+  expect(game.shooter).toBe('player5');
+
+  Dealer.manage(game);
+  expect(game.shooter).toBe('player1');
+
+  Dealer.manage(game);
+  expect(game.shooter).toBe('player2');
+
+  Dealer.requestPlayerRemoval(game, 'player2');
+  expect(game.shooter).toBe('player4');
+
+  Dealer.requestPlayerRemoval(game, 'player4');
+  expect(game.shooter).toBe('player5');
+
+  Dealer.requestPlayerRemoval(game, 'player5');
+  expect(game.shooter).toBe('player1');
+
+  Dealer.requestPlayerRemoval(game, 'player1');
+  expect(game.shooter).toBe(null);
 });

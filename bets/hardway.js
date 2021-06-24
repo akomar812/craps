@@ -24,6 +24,8 @@ class HardWay extends Bet {
   evaluate(game) {
     if (this.selection === game.dice.value) {
       return game.dice.current[0] === game.dice.current[1];
+    } else if (7 === game.dice.value) {
+      return false;
     }
   }
 }
