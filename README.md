@@ -53,13 +53,39 @@ https://github.com/akomar812/discord-craps
 
 ```
 exit                     leave the table
+```
+Leaves game if joined, and all wagers are wiped away. The player's pot will be preserved until the process
+is restarted
+
+```
 help                     show this
+```
+Show text interface documentation in interface display
+
+```
 dice                     show possible dice rolls with expected outputs
+```
+Show possible dice rolls, chance of occurring and ways of occurring
+
+```
 join                     join as a new player starting with $100
+```
+Joins an active craps game or starts one if none is available
+
+```
 bet [name] [amount]      make a wager on the craps table
+```
+Submit a wager against a bet
+
+```
 roll                     roll the dice
+```
+Roll the dice if you are the shooter. At least one wager must be submitted before the shooter can roll
+
+```
 reset cash               for when the tables turn against you
 ```
+Adds $100 to the caller's pot if they've fallen below $100
 
 # TODO
   - Some bets still need to be implemented:
