@@ -34,9 +34,9 @@ Use this mode if you want to integrate the craps game into another application
 ```
 
 Where:
-  -\<player\>       is the name of a player
-  -\<cmd\>          is a command from the text interface below
-  -\<messageFn\>    is the function you want the game to call to send output to the client
+- \<player\>       is the name of a player
+- \<cmd\>          is a command from the text interface below
+- \<messageFn\>    is the function you want the game to call to send output to the client
 
 # Text Interface
 ---
