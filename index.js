@@ -114,6 +114,7 @@ const handleHelp = (opts={}, send=console.log) => {
     `${pfx}exit                     leave the table`,
     `${pfx}help                     show this`,
     `${pfx}dice                     show possible dice rolls with expected outputs`,
+    `${pfx}status                   show the current game state`,
     `${pfx}join                     join as a new player starting with $100`,
     `${pfx}bet [name] [amount]      make a wager on the craps table`,
     `${pfx}roll                     roll the dice`,
@@ -155,7 +156,7 @@ const resetCash = (game, player, send) => {
 };
 
 const controller = (craps, player, cmd, send, opts={ prefix: '' }) => {
-  const comps = cmd.split(' ').map(c => c.trim());
+  const comps = cmd.split(' ').map(c => c.trim().toLowerCase());
 
   switch(comps[0]) {
   case 'exit':
@@ -164,6 +165,8 @@ const controller = (craps, player, cmd, send, opts={ prefix: '' }) => {
     return handleHelp({ prefix: opts.prefix }, send);
   case 'dice':
     return handleDice(send);
+  case 'status':
+    return handleStatus(craps, send);
   case 'join':
     handleJoin(craps, player, send);
     break;

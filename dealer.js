@@ -84,7 +84,7 @@ class Dealer {
 
       game.players[player].timeout = setTimeout(() => {
         this.requestPlayerRemoval(game, player);
-      }, 60000);
+      }, 150000);
     }
   }
 
@@ -143,17 +143,19 @@ class Dealer {
   }
 
   static requestBet(game, player, bet, amount) {
-    if (game.players[player].pot < amount) {
-      console.log(`Player's pot: ${game.players[player].pot} cannot support bet: ${amount}`);
+    if (player in game.players) {
+      if (game.players[player].pot < amount) {
+        console.log(`Player's pot: ${game.players[player].pot} cannot support bet: ${amount}`);
+        return false;
+      }
+  
+      if (bets[bet].isAllowingWagers(game)) {
+        game.players[player].wagers[bet] += parseFloat(amount);
+        return true;
+      }
+  
       return false;
     }
-
-    if (bets[bet].isAllowingWagers(game)) {
-      game.players[player].wagers[bet] += parseFloat(amount);
-      return true;
-    }
-
-    return false;
   }
 }
 
