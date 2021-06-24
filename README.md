@@ -3,7 +3,6 @@ Craps game that can be installed directly and played as a command line game or i
 as a 3rd party module which can be played with multiple players such as in a discord server
 
 # Usage
-
 ## CLI
 Use this mode if you just want to play a quick, single-player game of craps from the command line.
 
@@ -39,7 +38,6 @@ Where:
 - \<messageFn\>    is the function you want the game to call to send output to the client
 
 # Text Interface
----
 * Start game or join current game by running: `!join`
 * There must be at least one bet on the table before the shooter can roll
 * If a player or shooter is inactive for 1 minute they will be booted
