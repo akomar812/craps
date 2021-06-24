@@ -21,5 +21,5 @@
     "lint": "npx eslint ."
   },
   "author": "andrew komar",
-  "license": "ISC"
+  "license": "gpl-3.0"
 }
