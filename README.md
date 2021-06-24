@@ -36,13 +36,15 @@ Use this mode if you want to integrate the craps game into another application t
   craps(<player>, <cmd>, <messageFn>);
 ```
 
-## Discord bot
-https://github.com/akomar812/discord-craps
-
 Where:
 - \<player\>       is the name of a player
 - \<cmd\>          is a command from the text interface below
 - \<messageFn\>    is the function you want the game to call to send output to the client
+
+## Discord bot
+Use this if you want to use this library as a pre-made, multi-player discord bot
+
+https://github.com/akomar812/discord-craps
 
 # Text Interface
 * Start game or join current game by running: `!join`
