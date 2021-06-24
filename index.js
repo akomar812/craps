@@ -169,7 +169,7 @@ const controller = (craps, player, cmd, send, opts={ prefix: '' }) => {
   case 'bet':
     handleBet(craps, player, comps[1], comps[2], send);
     break;
-  case 'suck':
+  case 'reset':
     resetCash(craps, player, send);
     break;
   default:

@@ -1,5 +1,6 @@
 'use strict';
 const game = require('..').textInterface();
+jest.useFakeTimers();
 
 test('game works as expected', () => {
   const obj = { sendFn: () => {} };
@@ -9,7 +10,7 @@ test('game works as expected', () => {
   expect(craps.point).toBe(null);
   expect(craps.rotation).toStrictEqual([]);
   expect(craps.shooter).toBe(null);
-  expect(spy).toHaveBeenCalledTimes(2);
+  expect(spy).toHaveBeenCalledTimes(1);
 
   spy.mockRestore();
 });
@@ -28,7 +29,7 @@ test('game works as expected', () => {
   expect(craps.players.player.wagers.pass).toBe(10);
 
   craps = game('player1', 'exit', obj.sendFn);
-  expect(Object.keys(craps.players.player).length).toBe(2);
+  expect(Object.keys(craps.players).length).toBe(2);
 
   craps.dice.value = 7;
   craps.dice.current = [3, 4];

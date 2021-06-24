@@ -3,6 +3,7 @@ const Dealer = require('../dealer.js');
 const Wagers = require('../wagers.js');
 const Bet = require('../bets');
 const utils = require('./utils.js');
+jest.useFakeTimers();
 
 const newGameStub = (roll, pointValue=null, wagers={}) => {
   return {
@@ -19,6 +20,7 @@ const newGameStub = (roll, pointValue=null, wagers={}) => {
         })
       }
     },
+    saved: {},
 
     addPlayer: function(name, pot=100) {
       if (name in this.players) {
