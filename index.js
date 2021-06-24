@@ -150,7 +150,7 @@ const resetCash = (game, player, send) => {
   }
 };
 
-const controller = (craps, player, cmd, send, opts) => {
+const controller = (craps, player, cmd, send, opts={ prefix: '' }) => {
   const comps = cmd.split(' ').map(c => c.trim());
 
   switch(comps[0]) {
