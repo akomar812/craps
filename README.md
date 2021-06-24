@@ -36,6 +36,9 @@ Use this mode if you want to integrate the craps game into another application t
   craps(<player>, <cmd>, <messageFn>);
 ```
 
+## Discord bot
+https://github.com/akomar812/discord-craps
+
 Where:
 - \<player\>       is the name of a player
 - \<cmd\>          is a command from the text interface below
