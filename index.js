@@ -91,6 +91,10 @@ const handleStatus = (game, send=console.log) => {
 };
 
 const handleJoin = (game, player, send) => {
+  if (game.mode === 'single') {
+    return send('join command doesn\'t do anything in single player mode');
+  }
+
   try {
     game.Dealer.requestPlayerJoin(game, player);
   } catch(e) {
@@ -180,7 +184,7 @@ const controller = (craps, player, cmd, send, opts={ prefix: '' }) => {
 };
   
 module.exports.textInterface = (opts={ prefix: '' }) => {
-  const craps = new Craps();
+  const craps = new Craps({ mode: 'multi' });
 
   return (player, cmd, send) => {
     controller(craps, player, cmd, send, opts);
