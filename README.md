@@ -52,40 +52,27 @@ https://github.com/akomar812/discord-craps
 * If a player or shooter is inactive for 1 minute they will be booted
 
 ## Commands
-```
-exit
-```
+
+### exit
 Leaves game if joined, and all wagers are wiped away. The player's pot will be preserved until the process
 is restarted
 
-```
-help
-```
+### help
 Show text interface documentation in interface display
 
-```
-dice
-```
+### dice
 Show possible dice rolls, chance of occurring and ways of occurring
 
-```
-join
-```
+### join
 Joins an active craps game or starts one if none is available
 
-```
-bet [name] [amount]
-```
+### bet [name] [amount]
 Submit a wager against a bet
 
-```
-roll
-```
+### roll
 Roll the dice if you are the shooter. At least one wager must be submitted before the shooter can roll
 
-```
-reset cash
-```
+### reset cash
 Adds $100 to the caller's pot if they've fallen below $100
 
 # TODO
