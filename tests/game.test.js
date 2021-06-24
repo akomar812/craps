@@ -1,5 +1,5 @@
 'use strict';
-const game = require('..').asyncInterface();
+const game = require('..').textInterface();
 
 test('game works as expected', () => {
   const obj = { sendFn: () => {} };

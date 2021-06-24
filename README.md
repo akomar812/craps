@@ -31,7 +31,7 @@ The text interface below describes how to control the game
 Use this mode if you want to integrate the craps game into another application to play single/multi-player
 
 ```
-  const craps = require('craps').asyncInterface;
+  const craps = require('craps').textInterface;
 
   craps(<player>, <cmd>, <messageFn>);
 ```

@@ -179,7 +179,7 @@ const controller = (craps, player, cmd, send, opts={ prefix: '' }) => {
   handleStatus(craps, send);
 };
   
-module.exports.asyncInterface = (opts={ prefix: '' }) => {
+module.exports.textInterface = (opts={ prefix: '' }) => {
   const craps = new Craps();
 
   return (player, cmd, send) => {
@@ -198,12 +198,12 @@ module.exports.cli = (args) => {
   const player = args.playerName || 'player';
   const pot = args.pot || 1000;
   craps.addPlayer(player, pot);
-  textInterface(player, `${player} connected to craps table...\n${PS1}`);
+  cli(player, `${player} connected to craps table...\n${PS1}`);
 
-  function textInterface(player, msg) {
+  function cli(player, msg) {
     rl.question(msg, (answer) => {
       controller(craps, player, answer, console.log);
-      textInterface(player, PS1);
+      cli(player, PS1);
     });
   }
 };
