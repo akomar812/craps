@@ -5,6 +5,8 @@ as a 3rd party module which can be played with multiple players such as in a dis
 # Usage
 
 ## CLI
+Use this mode if you just want to play a quick game of craps from the command line
+
 First time install:
 
 `npm install -g .`
@@ -23,6 +25,7 @@ player connected to craps table...
 The text interface below describes how to control the game
 
 ## Import
+Use this mode if you want to integrate the craps game into another application
 
 ```
   const craps = require('craps').asyncInterface;
@@ -31,9 +34,9 @@ The text interface below describes how to control the game
 ```
 
 Where:
-  <player>       is the name of a player
-  <cmd>          is a command from the text interface below
-  <messageFn>    is the function you want the game to call to send output to the client
+  -\<player\>       is the name of a player
+  -\<cmd\>          is a command from the text interface below
+  -\<messageFn\>    is the function you want the game to call to send output to the client
 
 # Text Interface
 ---
