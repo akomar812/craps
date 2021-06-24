@@ -51,6 +51,7 @@ https://github.com/akomar812/discord-craps
 * There must be at least one bet on the table before the shooter can roll
 * If a player or shooter is inactive for 1 minute they will be booted
 
+## Commands
 ```
 exit                     leave the table
 ```
