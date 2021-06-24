@@ -146,7 +146,7 @@ const handleDice = (send) => {
 };
 
 const resetCash = (game, player, send) => {
-  if (game.players.player.pot < 100) {
+  if (game.players[player].pot < 100) {
     send(`$100 added to ${player} pot`);
     game.players[player].pot += 100;
   } else {

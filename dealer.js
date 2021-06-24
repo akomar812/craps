@@ -60,7 +60,7 @@ class Dealer {
             this.payoutLoss(game, player, bet);
           }
         } else {
-          results[bet] === true ?
+          results[bet] === true?
             this.payoutWin(game, player, bet) :
             this.payoutLoss(game, player, bet);
         }
@@ -90,13 +90,18 @@ class Dealer {
     const roll = game.dice.value;
     const payout = roll in bets[bet].payout ? bets[bet].payout[roll] : bets[bet].payout['*'];
     const stake = game.players[player].wagers[bet];
-    game.players[player].pot += (stake + (payout * stake));
-    game.players[player].wagers[bet] = 0;
+
+    if (stake > 0) {
+      game.players[player].pot += (stake + (payout * stake));
+      game.players[player].wagers[bet] = 0;
+    }
   }
 
   static payoutLoss(game, player, bet) {
-    game.players[player].pot -= game.players[player].wagers[bet];
-    game.players[player].wagers[bet] = 0;
+    if (game.players[player].wagers[bet] > 0) {
+      game.players[player].pot -= game.players[player].wagers[bet];
+      game.players[player].wagers[bet] = 0;
+    }
   }
 
   static requestPlayerJoin(game, player) {
