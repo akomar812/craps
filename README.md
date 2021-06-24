@@ -8,11 +8,15 @@ Use this mode if you just want to play a quick, single-player game of craps from
 
 First time install:
 
-`npm install -g .`
+```
+npm install -g .
+````
 
 To start game run:
 
-`craps`
+```
+craps
+````
 
 You should be met with the message:
 
