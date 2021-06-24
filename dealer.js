@@ -79,11 +79,13 @@ class Dealer {
   }
 
   static keepAlive(game, player) {
-    if (player in game.players && game.players[player].timeout) clearTimeout(game.players[player].timeout);
+    if (player in game.players) {
+      if (game.players[player].timeout) clearTimeout(game.players[player].timeout);
 
-    game.players[player].timeout = setTimeout(() => {
-      this.requestPlayerRemoval(game, player);
-    }, 60000);
+      game.players[player].timeout = setTimeout(() => {
+        this.requestPlayerRemoval(game, player);
+      }, 60000);
+    }
   }
 
   static payoutWin(game, player, bet) {
