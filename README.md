@@ -47,7 +47,7 @@ Use this if you want to use this library as a pre-made, multi-player discord bot
 https://github.com/akomar812/discord-craps
 
 # Text Interface
-* Start game or join current game by running: `!join`
+* Start game or join current game by running: `join`
 * There must be at least one bet on the table before the shooter can roll
 * If a player or shooter is inactive for 1 minute they will be booted
 
