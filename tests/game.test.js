@@ -11,7 +11,7 @@ test('game works as expected', () => {
   expect(craps.point).toBe(null);
   expect(craps.rotation).toStrictEqual([]);
   expect(craps.shooter).toBe(null);
-  expect(spy).toHaveBeenCalledTimes(1);
+  expect(spy).toHaveBeenCalledTimes(2);
 
   spy.mockRestore();
 });
