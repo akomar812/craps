@@ -40,10 +40,11 @@ Where:
 
 # Text Interface
 ---
-* Start game or join current game by running: !join
+* Start game or join current game by running: `!join`
 * There must be at least one bet on the table before the shooter can roll
 * If a player or shooter is inactive for 1 minute they will be booted
 
+```
 exit                     leave the table
 help                     show this
 dice                     show possible dice rolls with expected outputs
@@ -51,6 +52,7 @@ join                     join as a new player starting with $100
 bet [name] [amount]      make a wager on the craps table
 roll                     roll the dice
 reset cash               for when the tables turn against you
+```
 
 # TODO
   - Some bets still need to be implemented:
