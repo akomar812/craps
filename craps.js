@@ -40,7 +40,7 @@ class Craps {
       this.players[player].wagers = new Wagers();
     }
 
-    this.shooter = this.rotation[nextPlayerIndex];
+    if (this.mode === 'multi') this.shooter = this.rotation[nextPlayerIndex];
   }
 }
 

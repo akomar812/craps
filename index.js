@@ -202,6 +202,7 @@ module.exports.cli = (args) => {
   const player = args.playerName || 'player';
   const pot = args.pot || 1000;
   craps.addPlayer(player, pot);
+  craps.shooter = player;
   cli(player, `${player} connected to craps table...\n${PS1}`);
 
   function cli(player, msg) {
