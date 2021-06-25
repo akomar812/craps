@@ -1,7 +1,7 @@
 {
   "name": "craps",
   "version": "1.0.0",
-  "description": "",
+  "description": "text based module for playing craps directly at the command line or for importing into other modules for single/multiplayer play",
   "main": "index.js",
   "directories": {
     "test": "tests"

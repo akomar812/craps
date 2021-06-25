@@ -30,10 +30,6 @@ const newGameStub = (roll, pointValue=null, wagers={}) => {
       this.players[name] = { pot: pot, wagers: new Wagers() };
     },
 
-    removePlayer: function(name) {
-      delete this.players[name];
-    },
-
     newGame: function() {
       const players = Object.keys(this.players);
       const nextPlayerIndex = mod(players.indexOf(this.shooter) + 1, players.length);
@@ -518,4 +514,26 @@ test('dealer management of rotation', () => {
 
   Dealer.requestPlayerRemoval(game, 'player1');
   expect(game.shooter).toBe(null);
+});
+
+test('dealer management of point', () => {
+  const game = newGameStub([1, 1], null, null);
+  Dealer.requestPlayerRemoval(game, 'player');
+
+  Dealer.requestPlayerJoin(game, 'player');
+  Dealer.requestPlayerJoin(game, 'player1');
+
+  expect(game.point).toBe(null);
+
+  game.dice.value = 6;
+  Dealer.manage(game);
+
+  //// after 6 rolled point should be set
+  expect(game.point).toBe(6);
+
+  Dealer.requestPlayerRemoval(game, 'player');
+  Dealer.requestPlayerRemoval(game, 'player1');
+
+  expect(game.rotation.length).toBe(0);
+  expect(game.point).toBe(null);
 });

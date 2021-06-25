@@ -18,6 +18,11 @@ class Craps {
     this.rotation = [];
     this.point = null;
     this.shooter = null;
+
+    if (this.mode === 'single') {
+      this.addPlayer('player');
+      this.shooter = 'player';
+    }
   }
 
   addPlayer(name, pot=100) {
@@ -26,10 +31,6 @@ class Craps {
     }
 
     this.players[name] = { pot: pot, wagers: new Wagers() };
-  }
-
-  removePlayer(name) {
-    delete this.players[name];
   }
 
   newGame() {

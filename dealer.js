@@ -84,7 +84,7 @@ class Dealer {
 
       game.players[player].timeout = setTimeout(() => {
         this.requestPlayerRemoval(game, player);
-      }, 150000);
+      }, 300000);
     }
   }
 
@@ -131,10 +131,11 @@ class Dealer {
           game.shooter = game.rotation[nextPlayerIndex];
         } else {
           game.shooter = null;
+          game.point = null;
         }
       }
 
-      game.removePlayer(player);
+      delete game.players[player];
 
       if (game.rotation.indexOf(player) >= 0) {
         game.rotation.splice(game.rotation.indexOf(player), 1);

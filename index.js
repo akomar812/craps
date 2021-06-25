@@ -11,6 +11,11 @@ const tableOverride = {
   'right-mid': '' , 'middle': ''
 };
 
+const tableStyleOverride = {
+  head: [],
+  border: []
+};
+
 const handleBet = (game, player, bet, amount, send=console.log) => {
   game.Dealer.keepAlive(game, player);
   const bets = game.Dealer.getBets();
@@ -48,19 +53,13 @@ const handleStatus = (game, send=console.log) => {
 
   const gameTable = new Table({
     chars: tableOverride,
-    style: {
-      head: [],
-      border: []
-    }
+    style: tableStyleOverride
   });
 
   const wagerTable = new Table({
     head: [''].concat(Object.keys(game.players)), 
     chars: tableOverride,
-    style: {
-      head: [],
-      border: []
-    }
+    style: tableStyleOverride
   });
 
   const lastRoll = game.dice.value > 0 ? `${game.dice.value} (${game.dice.current})` : 'none';
@@ -75,6 +74,10 @@ const handleStatus = (game, send=console.log) => {
   gameTable.push({ 'Last Roll': lastRoll });
   gameTable.push({ 'Point': game.point ? game.point : 'not set' });
   gameTable.push({ 'Players': playerInfo });
+
+  if (game.mode === 'multi') {
+    gameTable.push({ 'Shooting order:': game.rotation.map(s => s === game.shooter ? s+'<-' : s).join('\n') });
+  }
 
   for (let bet in bets) {
     const playerBets = [];
@@ -195,18 +198,14 @@ module.exports.textInterface = (opts={ prefix: '' }) => {
   };
 };
 
-module.exports.cli = (args) => {
+module.exports.cli = () => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
   const craps = new Craps();
-  const player = args.playerName || 'player';
-  const pot = args.pot || 1000;
-  craps.addPlayer(player, pot);
-  craps.shooter = player;
-  cli(player, `${player} connected to craps table...\n${PS1}`);
+  cli('player', `player connected to craps table...\n${PS1}`);
 
   function cli(player, msg) {
     rl.question(msg, (answer) => {
