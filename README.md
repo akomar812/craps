@@ -2,17 +2,37 @@
 Craps game that can be installed directly and played as a command line game or imported
 as a 3rd party module which can be played with multiple players such as in a discord server
 
-# Usage
-## CLI
-Use this mode if you just want to play a quick, single-player game of craps from the command line.
+# Contents
 
-First time install:
+1. [Installation](#Installation)
+2. [Usage](#Usage)
+3. [Text Interface](#Text Interface)
+
+# Installation
+## From npm for use as import
 
 ```
+npm install --save @akomar812/craps
+```
+
+## From npm for playing on CLI
+
+```
+npm install -g @akomar812/craps
+```
+
+## From git repo for playing on CLI
+
+```
+# clone repo and cd into it
 npm install -g .
 ````
 
-To start game run:
+# Usage
+
+## To play as CLI
+
+Run:
 
 ```
 craps
@@ -25,10 +45,7 @@ player connected to craps table...
 >
 ```
 
-The text interface below describes how to control the game
-
-## Import
-Use this mode if you want to integrate the craps game into another application to play single/multi-player
+## To import as node_module
 
 ```
   const craps = require('craps').textInterface;
