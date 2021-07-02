@@ -15,6 +15,7 @@ class Place extends Bet {
     super({
       type: 'multi',
       houseEdge: .001,
+      sticky: true,
       payout: {
         '4': (9/5),
         '5': (7/5), 

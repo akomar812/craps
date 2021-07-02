@@ -87,8 +87,11 @@ class Dealer {
     const stake = game.players[player].wagers[bet];
 
     if (stake > 0) {
-      game.players[player].pot += (stake + (payout * stake));
-      game.players[player].wagers[bet] = 0;
+      game.players[player].pot += (payout * stake);
+
+      if (!bets[bet].sticky) {
+        game.players[player].wagers[bet] = 0;
+      }
     }
   }
 

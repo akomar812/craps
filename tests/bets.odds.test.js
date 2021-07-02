@@ -1,6 +1,5 @@
 'use strict';
 const Odds = require('../bets/odds.js');
-const utils = require('./utils.js');
 
 test('odds bet constructor works as expected', () => {
   const odds = new Odds();

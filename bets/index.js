@@ -17,6 +17,7 @@ class Bet {
     this.type = opts.type;
     this.houseEdge = opts.houseEdge;
     this.payout = opts.payout;
+    this.sticky = opts.sticky || false;
   }
 
   /**
