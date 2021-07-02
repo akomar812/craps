@@ -6,7 +6,7 @@ as a 3rd party module which can be played with multiple players such as in a dis
 
 1. [Installation](#Installation)
 2. [Usage](#Usage)
-3. [Text Interface](#Text\ Interface)
+3. [API](#API)
 
 # Installation
 ## From npm for use as import
@@ -55,7 +55,7 @@ player connected to craps table...
 
 Where:
 - \<player\>       is the name of a player
-- \<cmd\>          is a command from the text interface below
+- \<cmd\>          is a command from the api below
 - \<messageFn\>    is the function you want the game to call to send output to the client
 
 ## Discord bot
@@ -63,7 +63,7 @@ Use this if you want to use this library as a pre-made, multi-player discord bot
 
 https://github.com/akomar812/discord-craps
 
-# Text Interface
+# API
 * Start game or join current game by running: `join`
 * There must be at least one bet on the table before the shooter can roll
 * If a player or shooter is inactive for 1 minute they will be booted
