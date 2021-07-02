@@ -7,7 +7,7 @@ module.exports.mod = (n, m) => {
 };
 
 module.exports.dbInterface = (target) => {
-  const logFileStream = fs.createWriteStream(`./var/log/db.${(new Date()).getTime()}`, { flags: 'a' });
+  const logFileStream = target === ':memory:' ? process.stdout : fs.createWriteStream(`./var/log/db.${(new Date()).getTime()}`, { flags: 'a' });
 
   return new Sequelize(`sqlite:${target}`, {
     logging: msg => logFileStream.write(msg+'\n')
