@@ -1,6 +1,5 @@
 'use strict';
 const { Sequelize } = require('sequelize');
-const fs = require('fs');
 const Dice = require('./dice.js');
 
 module.exports.mod = (n, m) => {

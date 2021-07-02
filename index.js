@@ -4,7 +4,7 @@ const readline = require('readline');
 const Craps = require('./craps.js');
 const DB = require('./models.js');
 const Controller = require('./controller.js');
-const sequelize = require('./utils.js').dbInterface('./var/data/db', fs.createWriteStream(`./var/log/db.${(new Date()).getTime()}`, { flags: 'a' }));
+const sequelize = require('./utils.js').dbInterface(`${__dirname}/var/data/db`, fs.createWriteStream(`${__dirname}/var/log/db.${(new Date()).getTime()}`, { flags: 'a' }));
 const PS1 = '> ';
 
 module.exports.textInterface = (opts={ prefix: '' }) => {

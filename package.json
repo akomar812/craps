@@ -1,6 +1,6 @@
 {
   "name": "@akomar812/craps",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "text based module for playing craps directly at the command line or for importing into other modules for single/multiplayer play",
   "main": "index.js",
   "private": false,

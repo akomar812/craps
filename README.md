@@ -1,14 +1,15 @@
 ![Build](https://github.com/akomar812/craps/actions/workflows/npm-publish.yml/badge.svg)
 
+# Contents
+
+1. [Description](#Description)
+2. [Installation](#Installation)
+3. [Usage](#Usage)
+4. [API](#API)
+
 # Description
 Craps game that can be installed directly and played as a command line game or imported
 as a 3rd party module which can be played with multiple players such as in a discord server
-
-# Contents
-
-1. [Installation](#Installation)
-2. [Usage](#Usage)
-3. [API](#API)
 
 # Installation
 From npm for use as import
@@ -83,36 +84,38 @@ https://github.com/akomar812/discord-craps
 
 ## Commands
 
-### exit
+`exit`
 Leaves game if joined, and all wagers are wiped away. The player's pot will be preserved until the process
 is restarted
 
-### help
+`help`
 Show text interface documentation in interface display
 
-### dice
+`dice`
 Show possible dice rolls, chance of occurring and ways of occurring
 
-### status
+`status`
 Shows the current state of the game
 
-### bank (action) (amount)
-Actions are `withdraw`/`deposit`. The bank is used to add/remove
-money from the table to be stored in user's personal bot. Running
-the bank cmd with no action/amount reports back status information
-like player deposits, high scores, etc...
-
-### join
+`join`
 Joins an active craps game or starts one if none is available
 
-### bet [name] [amount]
+`bet [name] [amount]`
 Submit a wager against a bet
 
-### roll
+`roll`
 Roll the dice if you are the shooter. At least one wager must be submitted before the shooter can roll
 
-### reset cash
+`reset cash`
 Adds $100 to the caller's pot if they've fallen below $100
+
+`bank`
+Displays information about the money in the bank including user balances and high scores
+
+`bank (action) (amount)`
+Actions are `withdraw`/`deposit`. The bank is used to add/remove
+money from the table to be stored in user's personal bot.
+
 
 # TODO
   - Bets that still need to be implemented:
