@@ -13,6 +13,7 @@ const bets = {
   anyCraps: new (require('./bets/anycraps.js'))(),
   field: new (require('./bets/field.js'))(),
   odds: new (require('./bets/odds.js'))(),
+  horn: new (require('./bets/horn.js'))(),
   place4: new Place(4),
   place5: new Place(5),
   place6: new Place(6),

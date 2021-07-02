@@ -391,6 +391,12 @@ test('field bet', propBetTest('field', basicNamedWager('field'), (roll) => {
   return result;
 }));
 
+test('horn bet', propBetTest('horn', basicNamedWager('horn'), (roll) => {
+  if (roll === 2 || roll === 12) return 10 + 75;
+  else if (roll === 3 || roll === 11) return 10 + (75 / 2);
+  return -10;
+}));
+
 test('ability to request bets from the dealer', () => {
   const game = newGameStub([1, 1]);
   game.players.player.pot = 1;
