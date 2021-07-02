@@ -16,19 +16,21 @@ From npm for use as import
 ```
 npm install --save @akomar812/craps
 ```
+---
 
 From npm for playing on CLI
 
 ```
 npm install -g @akomar812/craps
 ```
+---
 
 From git repo for playing on CLI
 
 ```
 # clone repo and cd into it
 npm install -g .
-````
+```
 
 # Usage
 
@@ -50,7 +52,7 @@ player connected to craps table...
 ## To import as node_module
 
 ```
-  const craps = require('craps').textInterface;
+  const craps = await require('craps').textInterface(<opts>);
 
   craps(<player>, <cmd>, <messageFn>);
 ```
@@ -59,6 +61,12 @@ Where:
 - \<player\>       is the name of a player
 - \<cmd\>          is a command from the api below
 - \<messageFn\>    is the function you want the game to call to send output to the client
+- \<opts\>         has the following configuration options:
+```
+  {
+    "prefix": <string> // default is "", the value that all commands need to be prefixed with to register
+  }
+```
 
 ## Discord bot
 Use this if you want to use this library as a pre-made, multi-player discord bot
@@ -68,7 +76,10 @@ https://github.com/akomar812/discord-craps
 # API
 * Start game or join current game by running: `join`
 * There must be at least one bet on the table before the shooter can roll
-* If a player or shooter is inactive for 1 minute they will be booted
+* If a player or shooter is inactive for 5 minutes they will be booted
+* New and returning players need to fetch their money from the bank in order for it to be available
+  for wagering on the table. Players can take their winnings off of the table and store in the bank
+  at any time. Any money on the table will automatically be banked when the player exits
 
 ## Commands
 
