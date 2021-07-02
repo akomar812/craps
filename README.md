@@ -63,6 +63,15 @@ Show text interface documentation in interface display
 ### dice
 Show possible dice rolls, chance of occurring and ways of occurring
 
+### status
+Shows the current state of the game
+
+### bank (action) (amount)
+Actions are `withdraw`/`deposit`. The bank is used to add/remove
+money from the table to be stored in user's personal bot. Running
+the bank cmd with no action/amount reports back status information
+like player deposits, high scores, etc...
+
 ### join
 Joins an active craps game or starts one if none is available
 
@@ -76,12 +85,13 @@ Roll the dice if you are the shooter. At least one wager must be submitted befor
 Adds $100 to the caller's pot if they've fallen below $100
 
 # TODO
-  - Some bets still need to be implemented:
+  - Bets that still need to be implemented:
     - come
     - dont come
     - place lose
     - buy
     - lay
     - free odds
+    - horn
 
   - automated strategy support

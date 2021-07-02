@@ -1,7 +1,7 @@
 'use strict';
+const Bank = require('../bank.js');
 const Dealer = require('../dealer.js');
 const Wagers = require('../wagers.js');
-const Bet = require('../bets');
 const utils = require('./utils.js');
 jest.useFakeTimers();
 
@@ -20,7 +20,7 @@ const newGameStub = (roll, pointValue=null, wagers={}) => {
         })
       }
     },
-    saved: {},
+    bank: new Bank({ Models: { Account: {} } }),
 
     addPlayer: function(name, pot=100) {
       if (name in this.players) {
@@ -92,15 +92,14 @@ const propBetTest = (bet, wagerConfig, payoutFn) => {
   };
 };
 
-// test('bets getter', () => {
-//   const game = newGameStub([0, 0], null, basicNamedWager('pass'));
-//   const bets = Dealer.getBets();
+test('bets getter', () => {
+  const bets = Dealer.getBets();
 
-//   for (let bet in bets) {
-//     console.log(bets[bet])
-//     expect(bets[bet] instanceof Bet).toBe(true);
-//   }
-// });
+  for (let bet in bets) {
+    expect(bets[bet].type === 'prop' || bets[bet].type === 'multi').toBe(true);
+    expect(bets[bet].houseEdge >= 0);
+  }
+});
 
 test('win payout', () => {
   const game = newGameStub([0, 0], null, basicNamedWager('pass'));
@@ -391,149 +390,215 @@ test('ability to request bets from the dealer', () => {
 });
 
 test('ability to request player addition from dealer', () => {
-  const game = newGameStub([1, 1], null, null);
-  Dealer.requestPlayerRemoval(game, 'player');
+  const game = {
+    players: {},
+    bank: { deposits: {}, handleDeposit: () => {} },
+    addPlayer: () => {},
+    rotation: []
+  };
 
-  // before 1st player
-  expect('player' in game.players).toBe(false);
-  expect(game.shooter).toBe(null);
+  const depositSpy = jest.spyOn(game.bank, 'handleDeposit').mockImplementation(() => Promise.resolve());
+  const addSpy = jest.spyOn(game, 'addPlayer').mockImplementation((p) => game.players[p] = { pot: 0 });
+  const aliveSpy = jest.spyOn(Dealer, 'keepAlive').mockImplementation();
 
-  Dealer.requestPlayerJoin(game, 'player');
+  // when player doesn't exist
+  Dealer.requestPlayerJoin(game, 'player').then(() => {
+    expect('player' in game.players).toBe(true);
+    expect(depositSpy).toHaveBeenCalledTimes(1);
+    expect(depositSpy).toHaveBeenCalledWith('player', 100);
+    expect(addSpy).toHaveBeenCalledTimes(1);
+    expect(addSpy).toHaveBeenCalledWith('player');
+    expect(aliveSpy).toHaveBeenCalledTimes(1);
+    expect(aliveSpy).toHaveBeenCalledWith(game, 'player');
+    expect(game.rotation).toStrictEqual(['player']);
+    expect(game.shooter).toBe('player');
 
-  // after 1st player
-  expect('player' in game.players).toBe(true);
-  expect(game.shooter).toBe('player');
+    // when player exists in bank
+    game.bank.deposits.player1 = {};
+    return Dealer.requestPlayerJoin(game, 'player1');
+  }).then(() => {
+    expect('player1' in game.players).toBe(true);
+    expect(depositSpy).toHaveBeenCalledTimes(1);
+    expect(addSpy).toHaveBeenCalledTimes(2);
+    expect(addSpy).toHaveBeenNthCalledWith(2, 'player1');
+    expect(aliveSpy).toHaveBeenCalledTimes(2);
+    expect(aliveSpy).toHaveBeenNthCalledWith(2, game, 'player1');
+    expect(game.rotation).toStrictEqual(['player', 'player1']);
+    expect(game.shooter).toBe('player');
 
-  // before 2nd player
-  expect('player1' in game.players).toBe(false);
-  expect(game.shooter).toBe('player');
-
-  Dealer.requestPlayerJoin(game, 'player1');
-
-  // after 2nd player
-  expect('player1' in game.players).toBe(true);
-  expect(game.shooter).toBe('player');
-
-  // cannot have duplicate player
-  expect(() => Dealer.requestPlayerJoin(game, 'player')).toThrow('A player named player already exists');
+    jest.restoreAllMocks();
+  });
 });
 
 test('ability to request player removal from dealer', () => {
-  const game = newGameStub([1, 1], null, null);
-  Dealer.requestPlayerRemoval(game, 'player');
+  const game = {
+    players: {},
+    bank: { handleDeposit: () => {} }
+  };
 
-  // before player added
-  expect('player' in game.players).toBe(false);
-  expect(game.shooter).toBe(null);
+  const depositSpy = jest.spyOn(game.bank, 'handleDeposit').mockImplementation(() => Promise.resolve());
 
-  Dealer.requestPlayerJoin(game, 'player');
+  // when player doesn't exist should no op
+  Dealer.requestPlayerRemoval(game, 'player').then(() => {
+    expect(depositSpy).toHaveBeenCalledTimes(0);
 
-  // after player added
-  expect('player' in game.players).toBe(true);
-  expect(game.shooter).toBe('player');
-
-  Dealer.requestPlayerRemoval(game, 'player');
-
-  // after player removed
-  expect('player' in game.players).toBe(false);
-  expect(game.shooter).toBe(null);
+    // when player is the shooter
+    game.players = { player: { pot: 100 }, player1: { pot: 200 } };
+    game.rotation = ['player', 'player1'];
+    game.shooter = 'player';
+    game.point = 6;
+    return Dealer.requestPlayerRemoval(game, 'player');
+  }).then(() => {
+    expect(depositSpy).toHaveBeenCalledTimes(1);
+    expect(game.players).toStrictEqual({ player1: { pot: 200 } });
+    expect(game.rotation).toStrictEqual(['player1']);
+    expect(game.shooter).toStrictEqual('player1');
+    expect(game.point).toStrictEqual(6);
+  
+    // when player is the shooter and the last remaining player
+    return Dealer.requestPlayerRemoval(game, 'player1');
+  }).then(() => {
+    expect(depositSpy).toHaveBeenCalledTimes(2);
+    expect(game.players).toStrictEqual({});
+    expect(game.rotation).toStrictEqual([]);
+    expect(game.shooter).toStrictEqual(null);
+    expect(game.point).toStrictEqual(null);
+  });
 });
 
 test('dealer management of rotation', () => {
-  const game = newGameStub([1, 1], null, null);
-  Dealer.requestPlayerRemoval(game, 'player');
+  const game = {
+    shooter: null,
+    dice: {},
+    players: {},
+    rotation: [],
+    bank: { deposits: {}, handleDeposit: () => Promise.resolve() },
+    addPlayer: function(player) {
+      this.players[player] = { pot: 0, wagers: new Wagers() };
+    }
+  };
 
-  // before player added
-  expect('player' in game.players).toBe(false);
-  expect('player1' in game.players).toBe(false);
-  expect('player2' in game.players).toBe(false);
-  expect('player3' in game.players).toBe(false);
-  expect('player4' in game.players).toBe(false);
-  expect('player5' in game.players).toBe(false);
-  expect(game.shooter).toBe(null);
+  jest.spyOn(Dealer, 'keepAlive').mockImplementation();
 
-  Dealer.requestPlayerJoin(game, 'player');
-  Dealer.requestPlayerJoin(game, 'player1');
-  Dealer.requestPlayerJoin(game, 'player2');
-  Dealer.requestPlayerJoin(game, 'player3');
-  Dealer.requestPlayerJoin(game, 'player4');
-  Dealer.requestPlayerJoin(game, 'player5');
+  return Promise.all([
+    Dealer.requestPlayerJoin(game, 'player'),
+    Dealer.requestPlayerJoin(game, 'player1'),
+    Dealer.requestPlayerJoin(game, 'player2'),
+    Dealer.requestPlayerJoin(game, 'player3'),
+    Dealer.requestPlayerJoin(game, 'player4'),
+    Dealer.requestPlayerJoin(game, 'player5')
+  ]).then(() => {
+    // after player added
+    expect('player' in game.players).toBe(true);
+    expect('player1' in game.players).toBe(true);
+    expect('player2' in game.players).toBe(true);
+    expect('player3' in game.players).toBe(true);
+    expect('player4' in game.players).toBe(true);
+    expect('player5' in game.players).toBe(true);
+    expect(game.shooter).toBe('player');
+    expect(game.rotation).toStrictEqual(['player', 'player1', 'player2', 'player3', 'player4', 'player5']);
 
-  // after player added
-  expect('player' in game.players).toBe(true);
-  expect('player1' in game.players).toBe(true);
-  expect('player2' in game.players).toBe(true);
-  expect('player3' in game.players).toBe(true);
-  expect('player4' in game.players).toBe(true);
-  expect('player5' in game.players).toBe(true);
-  expect(game.shooter).toBe('player');
-  expect(game.rotation).toStrictEqual(['player', 'player1', 'player2', 'player3', 'player4', 'player5']);
+    return Dealer.requestPlayerRemoval(game, 'player');
+  }).then(() => {
+    expect('player' in game.players).toBe(false);
+    expect(game.rotation).toStrictEqual(['player1', 'player2', 'player3', 'player4', 'player5']);
+    expect(game.shooter).toBe('player1');
 
-  Dealer.requestPlayerRemoval(game, 'player');
+    return Dealer.requestPlayerRemoval(game, 'player3');
+  }).then(() => {
+    expect('player3' in game.players).toBe(false);
+    expect(game.rotation).toStrictEqual(['player1', 'player2', 'player4', 'player5']);
+    expect(game.shooter).toBe('player1');
 
-  //// after player removed
-  expect('player' in game.players).toBe(false);
-  expect(game.rotation).toStrictEqual(['player1', 'player2', 'player3', 'player4', 'player5']);
-  expect(game.shooter).toBe('player1');
+    return Dealer.requestPlayerRemoval(game, 'player1');
+  }).then(() => {
+    expect(game.rotation).toStrictEqual(['player2', 'player4', 'player5']);
+    expect(game.shooter).toBe('player2');
 
-  Dealer.requestPlayerRemoval(game, 'player3');
+    return Dealer.requestPlayerRemoval(game, 'player4');
+  }).then(() => {
+    expect(game.rotation).toStrictEqual(['player2', 'player5']);
+    expect(game.shooter).toBe('player2');
 
-  //// after player removed
-  expect('player' in game.players).toBe(false);
-  expect(game.rotation).toStrictEqual(['player1', 'player2', 'player4', 'player5']);
-  expect(game.shooter).toBe('player1');
+    return Dealer.requestPlayerRemoval(game, 'player2');    
+  }).then(() => {
+    expect(game.rotation).toStrictEqual(['player5']);
+    expect(game.shooter).toBe('player5');
 
-  game.dice.value = 7;
-  Dealer.manage(game);
-
-  //// after 7 rolled shooter should increment
-  expect('player' in game.players).toBe(false);
-  expect(game.rotation).toStrictEqual(['player1', 'player2', 'player4', 'player5']);
-  expect(game.shooter).toBe('player2');
-
-  Dealer.manage(game);
-  expect(game.shooter).toBe('player4');
-
-  Dealer.manage(game);
-  expect(game.shooter).toBe('player5');
-
-  Dealer.manage(game);
-  expect(game.shooter).toBe('player1');
-
-  Dealer.manage(game);
-  expect(game.shooter).toBe('player2');
-
-  Dealer.requestPlayerRemoval(game, 'player2');
-  expect(game.shooter).toBe('player4');
-
-  Dealer.requestPlayerRemoval(game, 'player4');
-  expect(game.shooter).toBe('player5');
-
-  Dealer.requestPlayerRemoval(game, 'player5');
-  expect(game.shooter).toBe('player1');
-
-  Dealer.requestPlayerRemoval(game, 'player1');
-  expect(game.shooter).toBe(null);
+    return Dealer.requestPlayerRemoval(game, 'player5');  
+  }).then(() => {
+    expect(game.shooter).toBe(null);
+    jest.restoreAllMocks();
+  }).catch((e) => {
+    jest.restoreAllMocks();
+    console.log(e);
+  });
 });
 
 test('dealer management of point', () => {
-  const game = newGameStub([1, 1], null, null);
-  Dealer.requestPlayerRemoval(game, 'player');
+  const game = {
+    shooter: 'player',
+    point: null,
+    dice: { value: 6, current: [3, 3] },
+    rotation: ['player', 'player1'],
+    bank: { handleDeposit: () => {} },
+    players: {
+      player: { pot: 0, wagers: new Wagers() },
+      player1: { pot: 1, wagers: new Wagers() }
+    }
+  };
 
-  Dealer.requestPlayerJoin(game, 'player');
-  Dealer.requestPlayerJoin(game, 'player1');
+  const spy = jest.spyOn(game.bank, 'handleDeposit').mockImplementation(() => Promise.resolve());
 
-  expect(game.point).toBe(null);
-
-  game.dice.value = 6;
   Dealer.manage(game);
 
   //// after 6 rolled point should be set
   expect(game.point).toBe(6);
 
-  Dealer.requestPlayerRemoval(game, 'player');
-  Dealer.requestPlayerRemoval(game, 'player1');
+  return Dealer.requestPlayerRemoval(game, 'player').then(() => {
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(game.rotation).toStrictEqual(['player1']);
+    expect(game.shooter).toBe('player1');
+    return Dealer.requestPlayerRemoval(game, 'player1');
+  }).then(() => {
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(game.rotation.length).toBe(0);
+    expect(game.point).toBe(null);
+  });
+});
 
-  expect(game.rotation.length).toBe(0);
-  expect(game.point).toBe(null);
+test('player timeout setter when player doesn\'t exist', () => {
+  expect(Dealer.keepAlive({ players: {} }, 'player')).toBe(undefined);
+});
+
+test('player timeout setter when player doesn\'t have existing timeout', () => {
+  const craps = { players: { player: {} } };
+  const removeSpy = jest.spyOn(Dealer, 'requestPlayerRemoval').mockImplementation();
+  Dealer.keepAlive(craps, 'player');
+
+  jest.runAllTimers();
+
+  expect(removeSpy).toHaveBeenCalledTimes(1);
+  expect(removeSpy).toHaveBeenCalledWith(craps, 'player');
+
+  jest.restoreAllMocks();
+});
+
+test('player timeout setter when player has existing timeout', () => {
+  const obj = { fn: () => {} };
+  const spy = jest.spyOn(obj, 'fn').mockImplementation();
+  const craps = { players: { player: { timeout: setTimeout(obj.fn, 1000000)} } };
+  const removeSpy = jest.spyOn(Dealer, 'requestPlayerRemoval').mockImplementation();
+  Dealer.keepAlive(craps, 'player');
+  
+  jest.runAllTimers();
+
+  expect(removeSpy).toHaveBeenCalledTimes(1);
+  expect(removeSpy).toHaveBeenCalledWith(craps, 'player');
+
+  jest.runAllTimers();
+
+  expect(spy).toHaveBeenCalledTimes(0);
+
+  jest.restoreAllMocks();
 });

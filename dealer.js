@@ -3,10 +3,7 @@ const Place = require('./bets/place.js');
 const Big = require('./bets/big.js');
 const HardWay = require('./bets/hardway.js');
 const Single = require('./bets/single.js');
-
-const mod = (n, m) => {
-  return ((n%m)+m)%m;
-};
+const mod = require('./utils.js').mod;
 
 const bets = {
   pass: new (require('./bets/pass.js'))(),
@@ -44,12 +41,6 @@ class Dealer {
     for (let bet in bets) {
       results[bet] = bets[bet].evaluate(game);
     }
-
-    // if (results.come !== undefined) {
-    //   results.come === true ?
-    //     this.payoutWin(game, player, 'pass') :
-    //     this.payoutLoss(game, player, 'pass');
-    // }
 
     for (let player in game.players) {
       for (let bet in bets) {
@@ -106,14 +97,15 @@ class Dealer {
     }
   }
 
-  static requestPlayerJoin(game, player) {
+  static async requestPlayerJoin(game, player) {
     game.addPlayer(player);
 
-    if (player in game.saved) {
-      game.players[player].pot = game.saved[player];
+    // start new players with 100
+    if (!(player in game.bank.deposits)) {
+      await game.bank.handleDeposit(player, 100);
     }
 
-    if (game.shooter === null) {
+    if (game.rotation.length === 0) {
       game.shooter = player;
     }
 
@@ -121,9 +113,9 @@ class Dealer {
     Dealer.keepAlive(game, player);
   }
 
-  static requestPlayerRemoval(game, player) {
+  static async requestPlayerRemoval(game, player) {
     if (player in game.players) {
-      game.saved[player] = game.players[player].pot;
+      await game.bank.handleDeposit(player, game.players[player].pot);
 
       if (game.shooter === player) {
         if (Object.keys(game.players).length > 1) {
@@ -135,11 +127,10 @@ class Dealer {
         }
       }
 
+      if (game.players[player].timeout) clearTimeout(game.players[player].timeout);
       delete game.players[player];
 
-      if (game.rotation.indexOf(player) >= 0) {
-        game.rotation.splice(game.rotation.indexOf(player), 1);
-      }
+      game.rotation.splice(game.rotation.indexOf(player), 1);
     }
   }
 

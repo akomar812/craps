@@ -2,3 +2,5 @@ node_modules
 coverage
 *.(swp|swo)
 .vscode
+package-lite.json
+var/

@@ -1,36 +1,37 @@
 'use strict';
+const Bank = require('./bank.js');
 const Dealer = require('./dealer.js');
 const Dice = require('./dice.js');
 const Wagers = require('./wagers.js');
-
-const mod = (n, m) => {
-  return ((n%m)+m)%m;
-};
+const mod = require('./utils.js').mod;
 
 class Craps {
-  constructor(opts={}) {
-    this.debug = opts.debug || false;
+  constructor(opts) {
     this.mode = opts.mode || 'single';
+    this.db = opts.db;
     this.Dealer = Dealer;
-    this.dice = new Dice({ debug: this.debug });
+    this.dice = new Dice();
     this.players = {};
-    this.saved = {};
     this.rotation = [];
     this.point = null;
     this.shooter = null;
-
-    if (this.mode === 'single') {
-      this.addPlayer('player');
-      this.shooter = 'player';
-    }
+    this.bank = new Bank({ Models: opts.Models });
   }
 
-  addPlayer(name, pot=100) {
+  init() {
+    return this.bank.init().then(() => {
+      if (this.mode === 'single') {
+        this.Dealer.requestPlayerJoin(this, 'player');
+      }
+    });
+  }
+
+  addPlayer(name) {
     if (name in this.players) {
       throw new Error(`A player named ${name} already exists`);
     }
 
-    this.players[name] = { pot: pot, wagers: new Wagers() };
+    this.players[name] = { pot: 0, wagers: new Wagers() };
   }
 
   newGame() {
