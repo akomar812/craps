@@ -1,4 +1,4 @@
-![example workflow](https://github.com/akomar812/craps/actions/workflows/npm-publish.yml/badge.svg)
+![Build](https://github.com/akomar812/craps/actions/workflows/npm-publish.yml/badge.svg)
 
 # Description
 Craps game that can be installed directly and played as a command line game or imported
