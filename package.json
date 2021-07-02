@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "cli-table": "^0.3.6",
-    "jest": "^27.0.4",
     "sequelize": "^6.6.4",
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
+    "jest": "^27.0.4",
     "eslint": "^7.29.0"
   },
   "scripts": {
