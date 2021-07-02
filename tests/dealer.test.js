@@ -2,7 +2,7 @@
 const Bank = require('../bank.js');
 const Dealer = require('../dealer.js');
 const Wagers = require('../wagers.js');
-const utils = require('./utils.js');
+const utils = require('../utils.js');
 jest.useFakeTimers();
 
 const newGameStub = (roll, pointValue=null, wagers={}) => {
@@ -416,6 +416,8 @@ test('ability to request bets from the dealer', () => {
   expect(spy).toHaveBeenCalledTimes(1);
   expect(spy).toHaveBeenCalledWith('Player\'s pot: 0 cannot support bet: 1');
 
+  expect(Dealer.requestBet(game, 'adpjwdapjowd', 'pass', 1)).toBe(undefined);
+
   spy.mockRestore();
 });
 
@@ -473,7 +475,7 @@ test('ability to request player removal from dealer', () => {
     expect(depositSpy).toHaveBeenCalledTimes(0);
 
     // when player is the shooter
-    game.players = { player: { pot: 100 }, player1: { pot: 200 } };
+    game.players = { player: { pot: 100, timeout: setTimeout(() => {}, 10000000) }, player1: { pot: 200 } };
     game.rotation = ['player', 'player1'];
     game.shooter = 'player';
     game.point = 6;
@@ -493,6 +495,7 @@ test('ability to request player removal from dealer', () => {
     expect(game.rotation).toStrictEqual([]);
     expect(game.shooter).toStrictEqual(null);
     expect(game.point).toStrictEqual(null);
+    jest.runAllTimers();
   });
 });
 

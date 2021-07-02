@@ -1,6 +1,6 @@
 'use strict';
 const DontPass = require('../bets/dontpass.js');
-const utils = require('./utils.js');
+const utils = require('../utils.js');
 
 test('don\'t pass constructor works as expected', () => {
   const dontpass = new DontPass();
@@ -24,7 +24,7 @@ test('don\'t pass bet evaluation behaves as expects', () => {
   expect(dontpass.evaluate({ dice: { value: 12 } })).toBe(true);
 
   for (var i=0; i<100; i++) {
-    const roll = utils.getRandomRoll();
+    const roll = utils.getRandomRoll().value;
     const point = utils.getRandomPoint();
     let expected;
 

@@ -1,7 +1,7 @@
 'use strict';
 
 test('account interface is as expected', async () => {
-  const Account = require('../account.js')(require('../utils.js').dbInterface(':memory:'));
+  const Account = require('../account.js')(require('../utils.js').dbInterface(':memory:', process.stdout));
   await Account.sync();
 
   const account = await Account.create({name:'test', balance: 5, high: 10});

@@ -1,5 +1,6 @@
 'use strict';
 const Table = require('cli-table');
+const pad = require('./utils.js').pad;
 
 const tableOverride = {
   'top': '' , 'top-mid': '' , 'top-left': '' , 'top-right': '',
@@ -139,6 +140,7 @@ class Controller {
   static handleHelp(game, player, opts={}, output) {
     const pfx = opts.prefix || '';
     const m = Controller.mappings();
+    const controls = Object.keys(m);
 
     output([
       'craps game',
@@ -146,7 +148,7 @@ class Controller {
       '* There must be at least one bet on the table before the shooter can roll',
       '* If a player or shooter is inactive for 1 minute they will be booted',
       '',
-      Object.keys(m).map(h => `${h}        ${m[h].description}`).map(h => pfx+h).join('\n')
+      controls.map(h => `${pad(controls, h)}        ${m[h].description}`).map(h => pfx+h).join('\n')
     ].join('\n'));
   }
 

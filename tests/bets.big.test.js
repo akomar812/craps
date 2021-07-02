@@ -1,6 +1,6 @@
 'use strict';
 const Big = require('../bets/big.js');
-const utils = require('./utils.js');
+const utils = require('../utils.js');
 
 test('big bet constructor works as expected', () => {
   expect(() => new Big()).toThrow(new Error('Big bets are only defined for 6, and 8'));
@@ -21,7 +21,7 @@ test('big 6 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(big6.evaluate({ dice: { value: i+j } })).toBe(utils.getBigBetExpectedValue(i, j, 6));
+      expect(big6.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i+j, 6));
     }
   }
 });
@@ -32,7 +32,7 @@ test('big 8 bet evaluation behaves as expects', () => {
 
   for (let i=1; i<=6; i++) {
     for (let j=1; j<=6; j++) {
-      expect(big8.evaluate({ dice: { value: i+j } })).toBe(utils.getBigBetExpectedValue(i, j, 8));
+      expect(big8.evaluate({ dice: { value: i+j } })).toBe(utils.getTargetExpectedValue(i+j, 8));
     }
   }
 });

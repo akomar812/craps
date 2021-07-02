@@ -1,6 +1,6 @@
 'use strict';
 const HardWay = require('../bets/hardway.js');
-const utils = require('./utils.js');
+const utils = require('../utils.js');
 
 test('hard way bet constructor works as expected', () => {
   expect(() => new HardWay()).toThrow(new Error('Hard way bets are only defined for 4, 6, 8, and 10'));
