@@ -11,19 +11,19 @@ as a 3rd party module which can be played with multiple players such as in a dis
 3. [API](#API)
 
 # Installation
-## From npm for use as import
+From npm for use as import
 
 ```
 npm install --save @akomar812/craps
 ```
 
-## From npm for playing on CLI
+From npm for playing on CLI
 
 ```
 npm install -g @akomar812/craps
 ```
 
-## From git repo for playing on CLI
+From git repo for playing on CLI
 
 ```
 # clone repo and cd into it
