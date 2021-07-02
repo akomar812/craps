@@ -6,7 +6,7 @@ as a 3rd party module which can be played with multiple players such as in a dis
 
 1. [Installation](#Installation)
 2. [Usage](#Usage)
-3. [Text Interface](#Text Interface)
+3. [Text Interface](#Text\ Interface)
 
 # Installation
 ## From npm for use as import
