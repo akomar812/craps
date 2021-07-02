@@ -91,7 +91,6 @@ Adds $100 to the caller's pot if they've fallen below $100
     - place lose
     - buy
     - lay
-    - free odds
     - horn
 
   - automated strategy support

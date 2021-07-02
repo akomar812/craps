@@ -10,8 +10,8 @@ class Bet {
       throw new Error('Invalid bet type: '+opts.type);
     }
 
-    if (opts.houseEdge <= 0 || opts.houseEdge >= 100) {
-      throw new Error('House edge must be in range (0 and 100)');
+    if (opts.houseEdge < 0 || opts.houseEdge >= 100) {
+      throw new Error('House edge must be in range [0 and 100)');
     }
 
     this.type = opts.type;

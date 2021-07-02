@@ -12,6 +12,7 @@ const bets = {
   any7: new (require('./bets/any7.js'))(),
   anyCraps: new (require('./bets/anycraps.js'))(),
   field: new (require('./bets/field.js'))(),
+  odds: new (require('./bets/odds.js'))(),
   place4: new Place(4),
   place5: new Place(5),
   place6: new Place(6),
@@ -27,7 +28,7 @@ const bets = {
   two: new Single(2),
   three: new Single(3),
   eleven: new Single(11),
-  twelve: new Single(12),
+  twelve: new Single(12)
 };
 
 class Dealer {

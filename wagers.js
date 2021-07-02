@@ -4,6 +4,7 @@ class Wagers {
   constructor() {
     this.pass = 0;
     this.dontpass = 0;
+    this.odds = 0;
     this.two = 0;
     this.three = 0;
     this.eleven = 0;

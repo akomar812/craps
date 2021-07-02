@@ -219,6 +219,30 @@ test('don\'t pass bet no op when point is on', () => {
   expect(game.players.player.wagers.dontpass).toBe(10);
 });
 
+test('odds bet', () => {
+  const bets = Dealer.getBets();
+  const odds = bets.odds;
+
+  for (let i=1; i<=6; i++) {
+    for (let j=1; j<=6; j++) {
+      const roll = i + j;
+      const game = newGameStub([i, j], [4, 5, 6, 8, 9, 10].indexOf(roll) >= 0 ? roll : null, basicNamedWager('odds'));
+
+      let payout = 0;
+      Dealer.manage(game);
+
+      if (roll in odds.payout) {
+        payout = 10 + (10 * odds.payout[roll]);
+      } else if (7 === roll) {
+        payout = -10;
+      }
+
+      expect(game.players.player.pot).toBe(payout);
+      expect(game.point).toBe(game.point);
+      expect(game.players.player.wagers.odds).toBe(payout !== 0 ? 0 : 10);
+    }
+  }
+});
 
 // test('come bet win', () => {
 //   const game = newGameStub([5, 2], 5, basicComeWager());
