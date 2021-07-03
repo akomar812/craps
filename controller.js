@@ -68,11 +68,11 @@ class Controller {
     };
   }
 
-  static handleBankStatus(game, player, opts, output) {
+  static async handleBankStatus(game, player, opts, output) {
     output(game.bank.status());
   }
 
-  static handleBank(game, player, opts, output) {
+  static async handleBank(game, player, opts, output) {
     if (['withdraw', 'deposit'].indexOf(opts.action) < 0)  {
       return output(`Bank action ${opts.action} unknown, must use "withdraw" or "deposit"`);
     }
@@ -89,7 +89,7 @@ class Controller {
     }
   
     try {
-      game.bank[action](player, amount);
+      await game.bank[action](player, amount);
   
       if ('withdraw' === opts.action) {
         game.players[player].pot += amount;
@@ -104,7 +104,7 @@ class Controller {
     }
   }
 
-  static handleBet(game, player, opts, output) {
+  static async handleBet(game, player, opts, output) {
     const bets = game.Dealer.getBets();
   
     if (!(opts.name in bets)) {
@@ -114,13 +114,14 @@ class Controller {
     if (!Number.isFinite(parseFloat(opts.amount)) || parseFloat(opts.amount) <= 0) {
       return output(`Cannot place bet: ${opts.amount}, amount must be a positive number`);
     }
-  
+
     if (!game.Dealer.requestBet(game, player, opts.name, opts.amount)) {
       output(`${player} failed to place bet: ${opts.name} for amount: ${opts.amount}`);
     }
+
   }
 
-  static handleCashReset(game, player, opts, output) {
+  static async handleCashReset(game, player, opts, output) {
     if (game.players[player].pot < 100) {
       output(`$100 added to ${player} pot`);
       game.players[player].pot += 100;
@@ -129,15 +130,15 @@ class Controller {
     }
   }
 
-  static handleDice(game, player, opts, output) {
+  static async handleDice(game, player, opts, output) {
     output(game.dice.odds());
   }
 
-  static handleExit(game, player) {
-    game.Dealer.requestPlayerRemoval(game, player);
+  static async handleExit(game, player) {
+    return await game.Dealer.requestPlayerRemoval(game, player);
   }
 
-  static handleHelp(game, player, opts={}, output) {
+  static async handleHelp(game, player, opts={}, output) {
     const pfx = opts.prefix || '';
     const m = Controller.mappings();
     const controls = Object.keys(m);
@@ -152,19 +153,19 @@ class Controller {
     ].join('\n'));
   }
 
-  static handleJoin(game, player, opts, output) {
+  static async handleJoin(game, player, opts, output) {
     if (game.mode === 'single') {
       return output('join command doesn\'t do anything in single player mode');
     }
   
     try {
-      game.Dealer.requestPlayerJoin(game, player);
+      return await game.Dealer.requestPlayerJoin(game, player);
     } catch(e) {
       output(e);
     }
   }
 
-  static handleRoll(game, player, opts, output) {
+  static async handleRoll(game, player, opts, output) {
     if (!game.players[player].wagers.isActive()) {
       return output('A bet must be placed before the dice can be rolled');
     }
@@ -177,7 +178,7 @@ class Controller {
     game.Dealer.manage(game);
   }
 
-  static handleStatus(game, player, opts, output) {
+  static async handleStatus(game, player, opts, output) {
     const bets = game.Dealer.getBets();
   
     const gameTable = new Table({
@@ -222,10 +223,11 @@ class Controller {
     output(wagerTable.toString());
   }
 
-  static input(craps, player, cmd, output=console.log, opts={ prefix: '' }) {
+  static async input(craps, player, cmd, output=console.log, opts={ prefix: '' }) {
     craps.Dealer.keepAlive(craps, player);
     const m = Controller.mappings();
     let unrecognizedCmd = true;
+    let res;
 
     for (let k in m) {
       const r = 'regex' in m[k] ? m[k].regex : new RegExp(`^${k}$`);
@@ -243,10 +245,10 @@ class Controller {
           k.split(' ').slice(1).map(p => p.slice(1, p.length - 1)).map((p, i) => args[p] = comps[i]);
         }
 
-        m[k].fn(craps, player, args, output);
+        res = await m[k].fn(craps, player, args, output);
 
         if (m[k].escapes) {
-          return;
+          return res;
         }
       }
     }
@@ -255,7 +257,8 @@ class Controller {
       output(`Unrecognized cmd: ${cmd}`);
     }
 
-    Controller.handleStatus(craps, player, opts, output);
+    await Controller.handleStatus(craps, player, opts, output);
+    return res;
   }
 }
 

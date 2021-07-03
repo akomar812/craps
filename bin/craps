@@ -1,2 +1,31 @@
 #!/usr/bin/env node
-require('..').cli(require('minimist')(process.argv));
+'use strict';
+// require('..').cli(require('minimist')(process.argv));
+const fs = require('fs');
+const parseArgs = require('minimist');
+const readline = require('readline');
+const Game = require('../index.js');
+const PS1 = '> ';
+
+async function init(args) {
+  const game = await Game({ dbTarget: `${__dirname}/../var/data/db`, dbLogStream: fs.createWriteStream(`${__dirname}/../var/log/db.${(new Date()).getTime()}`, { flags: 'a' }), ...args });
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  cli('player', `player connected to craps table...\n${PS1}`);
+
+  // save players pot in the bank on exit
+  rl.on('close', () => game('player', 'exit', console.log));
+
+  function cli(player, msg) {
+    rl.question(msg, async (answer) => {
+      await game(player, answer, console.log);
+      cli(player, PS1);
+    });
+  }
+}
+
+init(parseArgs(process.argv));

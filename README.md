@@ -3,15 +3,26 @@
 # Contents
 
 1. [Description](#Description)
-2. [Installation](#Installation)
-3. [Usage](#Usage)
-4. [API](#API)
+1. [System Requirements](#System-Requirements)
+1. [Installation](#Installation)
+1. [Usage](#Usage)
+1. [Game](#Game)
 
 # Description
 Craps game that can be installed directly and played as a command line game or imported
 as a 3rd party module which can be played with multiple players such as in a discord server
 
+# System Requirements
+```
+node.js (+12.0.0)
+sqlite3
+```
+
 # Installation
+There are several ways to install and use this module depending on how you plan to use it.
+Pick one of the following methods based on your needs
+---
+
 From npm for use as import
 
 ```
@@ -53,7 +64,7 @@ player connected to craps table...
 ## To import as node_module
 
 ```
-  const craps = await require('craps').textInterface(<opts>);
+  const craps = await require('@akomar812/craps')(<opts>);
 
   craps(<player>, <cmd>, <messageFn>);
 ```
@@ -65,7 +76,14 @@ Where:
 - \<opts\>         has the following configuration options:
 ```
   {
-    "prefix": <string> // default is "", the value that all commands need to be prefixed with to register
+    dbTarget: <string (default: ":memory:")>
+    // path for sqlite data file if storing data on disk
+
+    dbLogStream: <object (default: process.stdout)>
+    // object who's `write` method get's called when DB creates logs
+
+    prefix: <string (default: "")>
+    // prefix string in front of all cmds
   }
 ```
 
@@ -74,7 +92,7 @@ Use this if you want to use this library as a pre-made, multi-player discord bot
 
 https://github.com/akomar812/discord-craps
 
-# API
+# Game
 * Start game or join current game by running: `join`
 * There must be at least one bet on the table before the shooter can roll
 * If a player or shooter is inactive for 5 minutes they will be booted
@@ -84,38 +102,60 @@ https://github.com/akomar812/discord-craps
 
 ## Commands
 
-`exit`
-Leaves game if joined, and all wagers are wiped away. The player's pot will be preserved until the process
-is restarted
+```
+exit
+# Leaves game if joined, and all wagers are wiped away. The
+# player's pot is automatically deposited in the bank on exit
+```
 
-`help`
-Show text interface documentation in interface display
+```
+help
+# Show text interface documentation in interface display
+```
 
-`dice`
-Show possible dice rolls, chance of occurring and ways of occurring
+```
+dice
+# Show possible dice rolls, chance of occurring and ways of
+# occurring
+```
 
-`status`
-Shows the current state of the game
+```
+status
+# Shows the current state of the game
+```
 
-`join`
-Joins an active craps game or starts one if none is available
+```
+join
+# Joins an active craps game or starts one if none is available
+```
 
-`bet [name] [amount]`
-Submit a wager against a bet
+```
+bet [name] [amount]
+# Submit a wager against a bet
+```
 
-`roll`
-Roll the dice if you are the shooter. At least one wager must be submitted before the shooter can roll
+```
+roll
+# Roll the dice if you are the shooter. At least one wager must be
+# submitted before the shooter can roll
+```
 
-`reset cash`
-Adds $100 to the caller's pot if they've fallen below $100
+```
+reset cash
+# Adds $100 to the caller's pot if they've fallen below $100
+```
 
-`bank`
-Displays information about the money in the bank including user balances and high scores
+```
+bank
+# Displays information about the money in the bank including user
+# balances and high scores
+```
 
-`bank (action) (amount)`
-Actions are `withdraw`/`deposit`. The bank is used to add/remove
-money from the table to be stored in user's personal bot.
-
+```
+bank (action) (amount)
+# Actions are `withdraw`/`deposit`. The bank is used to add/remove
+# money from the table to be stored in user's personal bot.
+```
 
 # TODO
   - Bets that still need to be implemented:

@@ -3,5 +3,4 @@ coverage
 *.(swp|swo)
 .vscode
 .recovery
-package-lite.json
 var/
