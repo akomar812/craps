@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 'use strict';
-// require('..').cli(require('minimist')(process.argv));
 const fs = require('fs');
 const parseArgs = require('minimist');
 const readline = require('readline');
-const Game = require('../index.js');
+const Game = require('../src');
 const PS1 = '> ';
 
 async function init(args) {
