@@ -78,12 +78,15 @@ Where:
   {
     dbTarget: <string (default: ":memory:")>
     // path for sqlite data file if storing data on disk
+    // e.g. "var/data/db"
 
     dbLogStream: <object (default: process.stdout)>
     // object who's `write` method get's called when DB creates logs
+    // e.g require("fs").createReadStream(`var/log/db.${someNameFunc()}.log`, { flags: 'a' });
 
     prefix: <string (default: "")>
     // prefix string in front of all cmds
+    // e.g. "!" requires all cmds to be run with !, for example !roll
   }
 ```
 

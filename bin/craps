@@ -7,7 +7,13 @@ const Game = require('../src');
 const PS1 = '> ';
 
 async function init(args) {
-  const game = await Game({ dbTarget: `${__dirname}/../var/data/db`, dbLogStream: fs.createWriteStream(`${__dirname}/../var/log/db.${(new Date()).getTime()}`, { flags: 'a' }), ...args });
+  const crapsConfig = {
+    dbTarget: `${__dirname}/../var/data/db`,
+    dbLogStream: fs.createWriteStream(`${__dirname}/../var/log/db.${(new Date()).getTime()}`, { flags: 'a' }),
+    ...args
+  };
+
+  const game = await Game(crapsConfig);
 
   const rl = readline.createInterface({
     input: process.stdin,
