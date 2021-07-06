@@ -26,6 +26,13 @@ class Wagers {
     this.place9 = 0;
     this.place10 = 0;
 
+    this.placelose4 = 0;
+    this.placelose5 = 0;
+    this.placelose6 = 0;
+    this.placelose8 = 0;
+    this.placelose9 = 0;
+    this.placelose10 = 0;
+
     this.big6 = 0;
     this.big8 = 0;
 

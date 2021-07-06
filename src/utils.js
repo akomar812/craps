@@ -25,6 +25,14 @@ module.exports.getTargetExpectedValue = (roll, target) => {
   }
 };
 
+module.exports.getTargetInverseExpectedValue = (roll, target) => {
+  if (roll === target) {
+    return false;
+  } else if (roll === 7) {
+    return true;
+  }
+};
+
 module.exports.getHardWayExpectedValue = (d0, d1, target) => {
   if (d0 === d1 && d0 + d1 === target) {
     return true;

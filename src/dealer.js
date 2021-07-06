@@ -1,5 +1,6 @@
 'use strict';
 const Place = require('./bets/place.js');
+const PlaceLose = require('./bets/placelose.js');
 const Big = require('./bets/big.js');
 const HardWay = require('./bets/hardway.js');
 const Single = require('./bets/single.js');
@@ -20,6 +21,12 @@ const bets = {
   place8: new Place(8),
   place9: new Place(9),
   place10: new Place(10),
+  placelose4: new PlaceLose(4),
+  placelose5: new PlaceLose(5),
+  placelose6: new PlaceLose(6),
+  placelose8: new PlaceLose(8),
+  placelose9: new PlaceLose(9),
+  placelose10: new PlaceLose(10),
   big6: new Big(6),
   big8: new Big(8),
   hard4: new HardWay(4),
@@ -83,8 +90,14 @@ class Dealer {
 
   static payoutWin(game, player, bet) {
     const roll = game.dice.value;
-    const payout = roll in bets[bet].payout ? bets[bet].payout[roll] : bets[bet].payout['*'];
     const stake = game.players[player].wagers[bet];
+    let payout;
+    
+    if (bet.indexOf('placelose') === 0) {
+      payout = bets[bet].payout[bets[bet].selection];
+    } else {
+      payout = roll in bets[bet].payout ? bets[bet].payout[roll] : bets[bet].payout['*'];
+    }
 
     if (stake > 0) {
       game.players[player].pot += (payout * stake);

@@ -64,9 +64,16 @@ player connected to craps table...
 ## To import as node_module
 
 ```
-  const craps = await require('@akomar812/craps')(<opts>);
+  const game = await require('@akomar812/craps')(<opts>);
+  let craps;
 
-  craps(<player>, <cmd>, <messageFn>);
+  craps = await game(<player>, <cmd>, <messageFn>);
+
+  // e.g workflow: join, withdraw money, bet it on the pass line, and roll the dice
+  craps = await game('player', 'join', console.log);
+  craps = await game('player', 'bank withdraw 100', console.log);
+  craps = await game('player', 'bet pass 100', console.log);
+  craps = await game('player', 'roll', console.log);
 ```
 
 Where:
@@ -155,7 +162,7 @@ bank
 ```
 
 ```
-bank (action) (amount)
+bank [action] [amount]
 # Actions are `withdraw`/`deposit`. The bank is used to add/remove
 # money from the table to be stored in user's personal bot.
 ```
@@ -164,6 +171,5 @@ bank (action) (amount)
   - Bets that still need to be implemented:
     - come
     - dont come
-    - place lose
     - buy
     - lay

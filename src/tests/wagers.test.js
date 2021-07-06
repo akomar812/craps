@@ -13,7 +13,8 @@ test('wagers constructor works as expected', () => {
     'twelve',
     'any7',
     'anyCraps',
-    'field'
+    'field',
+    'horn'
   ].map(w => expect(wagers[w]).toBe(0));
 
   [
@@ -24,6 +25,15 @@ test('wagers constructor works as expected', () => {
     '9',
     '10'
   ].map(w => expect(wagers['place'+w]).toBe(0));
+
+  [
+    '4',
+    '5',
+    '6',
+    '8',
+    '9',
+    '10'
+  ].map(w => expect(wagers['placelose'+w]).toBe(0));
 
   [
     '6',

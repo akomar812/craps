@@ -314,6 +314,42 @@ test('place 10 bet', multiBetTest('place10', basicNamedWager('place10'), (dice) 
   else return [0, 10];
 }));
 
+test('placelose 4 bet', multiBetTest('placelose4', basicNamedWager('placelose4'), (dice) => {
+  if (dice[0] + dice[1] === 4) return [-10, 0];
+  else if (dice[0] + dice[1] === 7) return [10*(5/11), 0];
+  else return [0, 10];
+}));
+
+test('placelose 5 bet', multiBetTest('placelose5', basicNamedWager('placelose5'), (dice) => {
+  if (dice[0] + dice[1] === 5) return [-10, 0];
+  else if (dice[0] + dice[1] === 7) return [10*(5/8), 0];
+  else return [0, 10];
+}));
+
+test('placelose 6 bet', multiBetTest('placelose6', basicNamedWager('placelose6'), (dice) => {
+  if (dice[0] + dice[1] === 6) return [-10, 0];
+  else if (dice[0] + dice[1] === 7) return [10*(4/5), 0];
+  else return [0, 10];
+}));
+
+test('placelose 8 bet', multiBetTest('placelose8', basicNamedWager('placelose8'), (dice) => {
+  if (dice[0] + dice[1] === 8) return [-10, 0];
+  else if (dice[0] + dice[1] === 7) return [10*(4/5), 0];
+  else return [0, 10];
+}));
+
+test('placelose 9 bet', multiBetTest('placelose9', basicNamedWager('placelose9'), (dice) => {
+  if (dice[0] + dice[1] === 9) return [-10, 0];
+  else if (dice[0] + dice[1] === 7) return [10*(5/8), 0];
+  else return [0, 10];
+}));
+
+test('placelose 10 bet', multiBetTest('placelose10', basicNamedWager('placelose10'), (dice) => {
+  if (dice[0] + dice[1] === 10) return [-10, 0];
+  else if (dice[0] + dice[1] === 7) return [10*(5/11), 0];
+  else return [0, 10];
+}));
+
 test('big 6 bet', multiBetTest('big6', basicNamedWager('big6'), (dice) => {
   if (dice[0] + dice[1] === 6) return [10, 0];
   else if (dice[0] + dice[1] === 7) return [-10, 0];
